@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonrisa Norte - Clínica Dental</title>
+    <meta name="description" content="Sistema de gestión de citas dentales - Sonrisa Norte. Agenda tu cita en línea de forma rápida y segura.">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Animaciones personalizadas */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        
+        .animate-slideInLeft {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+        
+        .animate-slideInRight {
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        
+        /* Gradientes personalizados */
+        .gradient-blue {
+            background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%);
+        }
+        
+        .gradient-teal {
+            background: linear-gradient(135deg, #14B8A6 0%, #10B981 100%);
+        }
+        
+        /* Efectos hover */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Navegación fija con efecto blur */
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Botón CTA con efecto brillante */
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-shine::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-shine:hover::before {
+            left: 100%;
+        }
+        
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        /* Horarios disponibles */
+        .horario-btn {
+            transition: all 0.2s ease;
+        }
+
+        .horario-btn:hover:not(.disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+
+        .horario-btn.selected {
+            background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%);
+            color: white;
+            border-color: #0EA5E9;
+        }
+
+        .horario-btn.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #0EA5E9;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success/Error messages */
+        .alert {
+            padding: 16px;
+            border-radius: 12px;
+            margin: 16px 0;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .alert-success {
+            background-color: #D1FAE5;
+            color: #065F46;
+            border: 1px solid #10B981;
+        }
+
+        .alert-error {
+            background-color: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #EF4444;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- ==================== NAVEGACIÓN ==================== -->
+    <nav class="fixed w-full top-0 z-50 nav-blur border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="text-4xl">🦷</div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Sonrisa Norte</h1>
+                        <p class="text-xs text-gray-500">Clínica Dental</p>
+                    </div>
+                </div>
+                
+                <!-- Menú Desktop -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#inicio" class="text-gray-700 hover:text-blue-500 font-medium transition">Inicio</a>
+                    <a href="#servicios" class="text-gray-700 hover:text-blue-500 font-medium transition">Servicios</a>
+                    <a href="#como-funciona" class="text-gray-700 hover:text-blue-500 font-medium transition">Cómo Funciona</a>
+                    <a href="#contacto" class="text-gray-700 hover:text-blue-500 font-medium transition">Contacto</a>
+                    <button onclick="openLoginModal()" class="text-blue-500 hover:text-blue-600 font-medium transition">Iniciar Sesión</button>
+                    <button onclick="openRegisterModal()" class="bg-blue-500 text-white px-6 py-2.5 rounded-full hover:bg-blue-600 transition font-medium btn-shine">
+                        Registrarse
+                    </button>
+                </div>
+                
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" class="md:hidden text-gray-700">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Menú Móvil -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <div class="px-4 py-6 space-y-4">
+                <a href="#inicio" class="block text-gray-700 hover:text-blue-500 font-medium">Inicio</a>
+                <a href="#servicios" class="block text-gray-700 hover:text-blue-500 font-medium">Servicios</a>
+                <a href="#como-funciona" class="block text-gray-700 hover:text-blue-500 font-medium">Cómo Funciona</a>
+                <a href="#contacto" class="block text-gray-700 hover:text-blue-500 font-medium">Contacto</a>
+                <button onclick="openLoginModal()" class="block w-full text-left text-blue-500 hover:text-blue-600 font-medium">Iniciar Sesión</button>
+                <button onclick="openRegisterModal()" class="block w-full bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition text-center">
+                    Registrarse
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="inicio" class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Texto -->
+                <div class="space-y-8 animate-slideInLeft">
+                    <div class="inline-block">
+                        <span class="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-semibold">
+                            ✨ Sistema Digital de Citas
+                        </span>
+                    </div>
+                    
+                    <h1 class="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
+                        Tu sonrisa perfecta
+                        <span class="text-blue-500">comienza aquí</span>
+                    </h1>
+                    
+                    <p class="text-xl text-gray-600 leading-relaxed">
+                        Agenda tu cita dental en línea de forma rápida, segura y sin complicaciones. 
+                        Gestiona tus consultas desde cualquier lugar, en cualquier momento.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button onclick="openAgendarCitaModal()" class="gradient-blue text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition transform hover:scale-105 text-center btn-shine">
+                            <i class="fas fa-calendar-plus mr-2"></i>
+                            Agendar Cita Ahora
+                        </button>
+                        <a href="#como-funciona" class="bg-white text-gray-700 px-8 py-4 rounded-full font-semibold text-lg border-2 border-gray-300 hover:border-blue-500 hover:text-blue-500 transition text-center">
+                            <i class="fas fa-play-circle mr-2"></i>
+                            Cómo Funciona
+                        </a>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-6 pt-8 border-t border-gray-200">
+                        <div>
+                            <div class="text-3xl font-bold text-blue-500">500+</div>
+                            <div class="text-sm text-gray-600">Pacientes Atendidos</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-teal-500">98%</div>
+                            <div class="text-sm text-gray-600">Satisfacción</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-green-500">24/7</div>
+                            <div class="text-sm text-gray-600">Disponibilidad</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Imagen -->
+                <div class="relative animate-slideInRight">
+                    <div class="relative z-10">
+                        <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=800&q=80" 
+                             alt="Dentista profesional" 
+                             class="rounded-3xl shadow-2xl">
+                    </div>
+                    <!-- Decoración -->
+                    <div class="absolute -bottom-6 -right-6 w-72 h-72 bg-blue-200 rounded-3xl -z-0 opacity-50"></div>
+                    <div class="absolute -top-6 -left-6 w-72 h-72 bg-teal-200 rounded-3xl -z-0 opacity-30"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CARACTERÍSTICAS ==================== -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">¿Por qué elegir Sonrisa Norte?</h2>
+                <p class="text-xl text-gray-600">Tecnología y atención profesional para tu salud dental</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl card-hover border border-blue-100">
+                    <div class="w-16 h-16 gradient-blue rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-calendar-check text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Agenda en Línea</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Sistema digital disponible 24/7 para agendar, modificar o cancelar tus citas desde cualquier dispositivo.
+                    </p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-gradient-to-br from-teal-50 to-white p-8 rounded-2xl card-hover border border-teal-100">
+                    <div class="w-16 h-16 gradient-teal rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-shield-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">100% Seguro</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Tus datos están protegidos con encriptación de nivel bancario y cumplimiento de normas de privacidad.
+                    </p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-gradient-to-br from-green-50 to-white p-8 rounded-2xl card-hover border border-green-100">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-user-md text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Profesionales</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Equipo de dentistas certificados con años de experiencia y tecnología de última generación.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SERVICIOS ==================== -->
+    <section id="servicios" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Nuestros Servicios</h2>
+                <p class="text-xl text-gray-600">Tratamientos dentales de calidad para toda la familia</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Servicio 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
+                    <div class="text-5xl mb-4">🦷</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Limpieza Dental</h3>
+                    <p class="text-gray-600 mb-4">Limpieza profesional completa para mantener tu sonrisa saludable.</p>
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+                        <span class="text-2xl font-bold text-blue-500">$500</span>
+                        <span class="text-sm text-gray-500">45 min</span>
+                    </div>
+                </div>
+                
+                <!-- Servicio 2 -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
+                    <div class="text-5xl mb-4">✨</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Blanqueamiento</h3>
+                    <p class="text-gray-600 mb-4">Tratamiento profesional para una sonrisa más brillante y blanca.</p>
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+                        <span class="text-2xl font-bold text-blue-500">$2,000</span>
+                        <span class="text-sm text-gray-500">60 min</span>
+                    </div>
+                </div>
+                
+                <!-- Servicio 3 -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
+                    <div class="text-5xl mb-4">🔧</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Endodoncia</h3>
+                    <p class="text-gray-600 mb-4">Tratamiento de conducto radicular con tecnología avanzada.</p>
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+                        <span class="text-2xl font-bold text-blue-500">$2,500</span>
+                        <span class="text-sm text-gray-500">90 min</span>
+                    </div>
+                </div>
+                
+                <!-- Servicio 4 -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
+                    <div class="text-5xl mb-4">😁</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Ortodoncia</h3>
+                    <p class="text-gray-600 mb-4">Brackets y alineadores para corregir la posición dental.</p>
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+                        <span class="text-2xl font-bold text-blue-500">Desde $300</span>
+                        <span class="text-sm text-gray-500">Mensual</span>
+                    </div>
+                </div>
+                
+                <!-- Servicio 5 -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
+                    <div class="text-5xl mb-4">💎</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Resina Dental</h3>
+                    <p class="text-gray-600 mb-4">Restauración estética con materiales de alta calidad.</p>
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+                        <span class="text-2xl font-bold text-blue-500">$700</span>
+                        <span class="text-sm text-gray-500">45 min</span>
+                    </div>
+                </div>
+                
+                <!-- Servicio 6 -->
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
+                    <div class="text-5xl mb-4">👑</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Corona Dental</h3>
+                    <p class="text-gray-600 mb-4">Prótesis fija de porcelana para restaurar tu sonrisa.</p>
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+                        <span class="text-2xl font-bold text-blue-500">$3,500</span>
+                        <span class="text-sm text-gray-500">60 min</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button onclick="openAgendarCitaModal()" class="inline-block bg-blue-500 text-white px-10 py-4 rounded-full font-semibold text-lg hover:bg-blue-600 transition transform hover:scale-105 btn-shine">
+                    Agendar Cita
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CÓMO FUNCIONA ==================== -->
+    <section id="como-funciona" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">¿Cómo Funciona?</h2>
+                <p class="text-xl text-gray-600">Agenda tu cita en 3 simples pasos</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-12">
+                <!-- Paso 1 -->
+                <div class="text-center">
+                    <div class="w-20 h-20 gradient-blue rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold">
+                        1
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Regístrate</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Crea tu cuenta en menos de 2 minutos. Solo necesitas tu nombre, email y contraseña.
+                    </p>
+                </div>
+                
+                <!-- Paso 2 -->
+                <div class="text-center">
+                    <div class="w-20 h-20 gradient-teal rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold">
+                        2
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Elige tu Servicio</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Selecciona el tratamiento que necesitas y elige fecha y hora disponible que más te convenga.
+                    </p>
+                </div>
+                
+                <!-- Paso 3 -->
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold">
+                        3
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">¡Listo!</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Recibe confirmación inmediata y recordatorios automáticos antes de tu cita.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CTA FINAL ==================== -->
+    <section class="py-20 gradient-blue">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                ¿Listo para tu próxima cita dental?
+            </h2>
+            <p class="text-xl text-blue-100 mb-10">
+                Únete a cientos de pacientes satisfechos. Agenda tu cita hoy mismo.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="openRegisterModal()" class="bg-white text-blue-500 px-10 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition transform hover:scale-105 btn-shine">
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Crear Cuenta Gratis
+                </button>
+                <button onclick="openLoginModal()" class="bg-blue-600 text-white px-10 py-4 rounded-full font-semibold text-lg hover:bg-blue-700 transition border-2 border-white">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Iniciar Sesión
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONTACTO ==================== -->
+    <section id="contacto" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Información de contacto -->
+                <div>
+                    <h2 class="text-4xl font-bold text-gray-900 mb-6">Contáctanos</h2>
+                    <p class="text-xl text-gray-600 mb-8">
+                        ¿Tienes preguntas? Estamos aquí para ayudarte.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 gradient-blue rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-map-marker-alt text-white"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="font-bold text-gray-900 mb-1">Dirección</h3>
+                                <p class="text-gray-600">Av. Principal #123, Querétaro, México</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 gradient-teal rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-phone text-white"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="font-bold text-gray-900 mb-1">Teléfono</h3>
+                                <p class="text-gray-600">+52 442 123 4567</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-envelope text-white"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="font-bold text-gray-900 mb-1">Email</h3>
+                                <p class="text-gray-600">contacto@sonrisanorte.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-clock text-white"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="font-bold text-gray-900 mb-1">Horario</h3>
+                                <p class="text-gray-600">Lun - Vie: 9:00 AM - 7:00 PM</p>
+                                <p class="text-gray-600">Sáb: 9:00 AM - 2:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Redes Sociales -->
+                    <div class="mt-8">
+                        <h3 class="font-bold text-gray-900 mb-4">Síguenos</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center text-white hover:bg-blue-600 transition">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-pink-500 rounded-xl flex items-center justify-center text-white hover:bg-pink-600 transition">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-blue-400 rounded-xl flex items-center justify-center text-white hover:bg-blue-500 transition">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Formulario -->
+                <div class="bg-gray-50 p-8 rounded-2xl">
+                    <form id="contactForm" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-900 mb-2">Nombre Completo</label>
+                            <input type="text" required 
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-gray-900 mb-2">Email</label>
+                            <input type="email" required 
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-gray-900 mb-2">Teléfono</label>
+                            <input type="tel" 
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-gray-900 mb-2">Mensaje</label>
+                            <textarea rows="4" required 
+                                      class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"></textarea>
+                        </div>
+                        
+                        <button type="submit" 
+                                class="w-full gradient-blue text-white py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition transform hover:scale-105 btn-shine">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Enviar Mensaje
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <!-- Columna 1 -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="text-3xl">🦷</div>
+                        <div>
+                            <h3 class="text-xl font-bold">Sonrisa Norte</h3>
+                            <p class="text-sm text-gray-400">Clínica Dental</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Tu sonrisa es nuestra prioridad. Tecnología y profesionalismo al servicio de tu salud dental.
+                    </p>
+                </div>
+                
+                <!-- Columna 2 -->
+                <div>
+                    <h4 class="font-bold mb-4">Enlaces Rápidos</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#inicio" class="hover:text-white transition">Inicio</a></li>
+                        <li><a href="#servicios" class="hover:text-white transition">Servicios</a></li>
+                        <li><a href="#como-funciona" class="hover:text-white transition">Cómo Funciona</a></li>
+                        <li><a href="#contacto" class="hover:text-white transition">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Columna 3 -->
+                <div>
+                    <h4 class="font-bold mb-4">Servicios</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>Limpieza Dental</li>
+                        <li>Blanqueamiento</li>
+                        <li>Endodoncia</li>
+                        <li>Ortodoncia</li>
+                    </ul>
+                </div>
+                
+                <!-- Columna 4 -->
+                <div>
+                    <h4 class="font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Términos y Condiciones</a></li>
+                        <li><a href="#" class="hover:text-white transition">Política de Privacidad</a></li>
+                        <li><a href="#" class="hover:text-white transition">Aviso de Privacidad</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; 2026 Sonrisa Norte. Todos los derechos reservados.</p>
+                <p class="mt-2">
+                    Desarrollado por <span class="text-blue-400 font-semibold">Equipo TecMilenio</span> - 
+                    Joshua Juarez, Emilio Jaimes, Daniela Cevedo
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== MODAL: AGENDAR CITA ==================== -->
+    <div id="agendarCitaModal" class="modal">
+        <div class="modal-content p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-gray-900">📅 Agendar Cita</h2>
+                <button onclick="closeAgendarCitaModal()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="agendarCitaMessage"></div>
+
+            <form id="agendarCitaForm" class="space-y-6">
+                <!-- Nombre Completo -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Nombre Completo *</label>
+                    <input type="text" id="cita_nombre" required 
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                           placeholder="Juan Pérez García">
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Email *</label>
+                    <input type="email" id="cita_email" required 
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                           placeholder="juan@example.com">
+                </div>
+
+                <!-- Teléfono -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Teléfono *</label>
+                    <input type="tel" id="cita_telefono" required 
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                           placeholder="442 123 4567">
+                </div>
+
+                <!-- Servicio -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Servicio *</label>
+                    <select id="cita_servicio" required 
+                            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition">
+                        <option value="">Selecciona un servicio</option>
+                        <option value="Limpieza Dental - $500">Limpieza Dental - $500</option>
+                        <option value="Blanqueamiento - $2,000">Blanqueamiento - $2,000</option>
+                        <option value="Endodoncia - $2,500">Endodoncia - $2,500</option>
+                        <option value="Ortodoncia - Desde $300">Ortodoncia - Desde $300</option>
+                        <option value="Resina Dental - $700">Resina Dental - $700</option>
+                        <option value="Corona Dental - $3,500">Corona Dental - $3,500</option>
+                    </select>
+                </div>
+
+                <!-- Fecha -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Fecha de la Cita *</label>
+                    <input type="date" id="cita_fecha" required 
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition">
+                </div>
+
+                <!-- Horarios Disponibles -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-3">Horario Disponible *</label>
+                    <div class="grid grid-cols-3 gap-3" id="horariosContainer">
+                        <!-- Se generarán dinámicamente -->
+                    </div>
+                    <input type="hidden" id="cita_horario" required>
+                </div>
+
+                <!-- Mensaje/Motivo -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Motivo de la Consulta (Opcional)</label>
+                    <textarea id="cita_mensaje" rows="3" 
+                              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                              placeholder="Describe brevemente el motivo de tu consulta..."></textarea>
+                </div>
+
+                <!-- Botones -->
+                <div class="flex gap-4">
+                    <button type="submit" 
+                            class="flex-1 gradient-blue text-white py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition transform hover:scale-105">
+                        <i class="fas fa-check mr-2"></i>
+                        Confirmar Cita
+                    </button>
+                    <button type="button" onclick="closeAgendarCitaModal()" 
+                            class="px-8 py-4 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: REGISTRO ==================== -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-gray-900">👤 Crear Cuenta</h2>
+                <button onclick="closeRegisterModal()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="registerMessage"></div>
+
+            <form id="registerForm" class="space-y-6">
+                <!-- Nombre Completo -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Nombre Completo *</label>
+                    <input type="text" id="register_nombre" required 
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                           placeholder="Juan Pérez García">
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Email *</label>
+                    <input type="email" id="register_email" required 
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                           placeholder="juan@example.com">
+                </div>
+
+                <!-- Teléfono -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Teléfono *</label>
+                    <input type="tel" id="register_telefono" required 
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                           placeholder="442 123 4567">
+                </div>
+
+                <!-- Contraseña -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Contraseña *</label>
+                    <input type="password" id="register_password" required minlength="6"
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                           placeholder="Mínimo 6 caracteres">
+                </div>
+
+                <!-- Confirmar Contraseña -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Confirmar Contraseña *</label>
+                    <input type="password" id="register_password_confirm" required minlength="6"
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                           placeholder="Repite tu contraseña">
+                </div>
+
+                <!-- Términos y Condiciones -->
+                <div class="flex items-start">
+                    <input type="checkbox" id="register_terms" required 
+                           class="mt-1 w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500">
+                    <label for="register_terms" class="ml-3 text-sm text-gray-600">
+                        Acepto los <a href="#" class="text-blue-500 hover:underline">Términos y Condiciones</a> 
+                        y la <a href="#" class="text-blue-500 hover:underline">Política de Privacidad</a>
+                    </label>
+                </div>
+
+                <!-- Botones -->
+                <div class="flex gap-4">
+                    <button type="submit" 
+                            class="flex-1 gradient-blue text-white py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition transform hover:scale-105">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        Registrarse
+                    </button>
+                    <button type="button" onclick="closeRegisterModal()" 
+                            class="px-8 py-4 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition">
+                        Cancelar
+                    </button>
+                </div>
+
+                <!-- Link a Login -->
+                <p class="text-center text-sm text-gray-600">
+                    ¿Ya tienes cuenta? 
+                    <button type="button" onclick="switchToLogin()" class="text-blue-500 font-semibold hover:underline">
+                        Inicia Sesión
+                    </button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: LOGIN ==================== -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-gray-900">🔐 Iniciar Sesión</h2>
+                <button onclick="closeLoginModal()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="loginMessage"></div>
+
+            <form id="loginForm" class="space-y-6">
+                <!-- Email -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Email *</label>
+                    <input type="email" id="login_email" required 
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                           placeholder="juan@example.com">
+                </div>
+
+                <!-- Contraseña -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-900 mb-2">Contraseña *</label>
+                    <input type="password" id="login_password" required 
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                           placeholder="Tu contraseña">
+                </div>
+
+                <!-- Recordarme y Olvidé contraseña -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="login_remember" 
+                               class="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="login_remember" class="ml-2 text-sm text-gray-600">
+                            Recordarme
+                        </label>
+                    </div>
+                    <a href="#" class="text-sm text-blue-500 hover:underline">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                </div>
+
+                <!-- Botones -->
+                <div class="flex gap-4">
+                    <button type="submit" 
+                            class="flex-1 gradient-blue text-white py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition transform hover:scale-105">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Iniciar Sesión
+                    </button>
+                    <button type="button" onclick="closeLoginModal()" 
+                            class="px-8 py-4 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition">
+                        Cancelar
+                    </button>
+                </div>
+
+                <!-- Link a Registro -->
+                <p class="text-center text-sm text-gray-600">
+                    ¿No tienes cuenta? 
+                    <button type="button" onclick="switchToRegister()" class="text-blue-500 font-semibold hover:underline">
+                        Regístrate aquí
+                    </button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // ==================== CONFIGURACIÓN INICIAL ====================
+        
+        // Configurar fecha mínima (hoy)
+        const today = new Date().toISOString().split('T')[0];
+        
+        // Horarios disponibles
+        const horariosDisponibles = [
+            '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+            '12:00', '14:00', '14:30', '15:00', '15:30', '16:00',
+            '16:30', '17:00', '17:30', '18:00'
+        ];
+
+        // LocalStorage keys
+        const STORAGE_KEYS = {
+            USUARIOS: 'sonrisa_norte_usuarios',
+            CITAS: 'sonrisa_norte_citas',
+            USUARIO_ACTUAL: 'sonrisa_norte_usuario_actual'
+        };
+
+        // ==================== FUNCIONES AUXILIARES ====================
+
+        // Obtener datos de localStorage
+        function getFromStorage(key) {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : [];
+        }
+
+        // Guardar datos en localStorage
+        function saveToStorage(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        // Generar ID único
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // Mostrar mensaje
+        function showMessage(elementId, message, type = 'success') {
+            const element = document.getElementById(elementId);
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+            element.innerHTML = `
+                <div class="alert ${alertClass}">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-2"></i>
+                    ${message}
+                </div>
+            `;
+            setTimeout(() => {
+                element.innerHTML = '';
+            }, 5000);
+        }
+
+        // ==================== MODAL: AGENDAR CITA ====================
+
+        function openAgendarCitaModal() {
+            const modal = document.getElementById('agendarCitaModal');
+            modal.classList.add('active');
+            generarHorarios();
+            
+            // Configurar fecha mínima
+            document.getElementById('cita_fecha').min = today;
+        }
+
+        function closeAgendarCitaModal() {
+            const modal = document.getElementById('agendarCitaModal');
+            modal.classList.remove('active');
+            document.getElementById('agendarCitaForm').reset();
+            document.getElementById('agendarCitaMessage').innerHTML = '';
+        }
+
+        // Generar botones de horarios
+        function generarHorarios() {
+            const container = document.getElementById('horariosContainer');
+            container.innerHTML = '';
+
+            horariosDisponibles.forEach(horario => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'horario-btn px-4 py-3 border-2 border-gray-300 rounded-xl text-sm font-semibold text-gray-700 hover:border-blue-500';
+                button.textContent = horario;
+                button.onclick = () => seleccionarHorario(horario, button);
+                container.appendChild(button);
+            });
+        }
+
+        // Seleccionar horario
+        function seleccionarHorario(horario, button) {
+            // Remover selección anterior
+            document.querySelectorAll('.horario-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Seleccionar nuevo horario
+            button.classList.add('selected');
+            document.getElementById('cita_horario').value = horario;
+        }
+
+        // Enviar formulario de cita
+        document.getElementById('agendarCitaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const nombre = document.getElementById('cita_nombre').value;
+            const email = document.getElementById('cita_email').value;
+            const telefono = document.getElementById('cita_telefono').value;
+            const servicio = document.getElementById('cita_servicio').value;
+            const fecha = document.getElementById('cita_fecha').value;
+            const horario = document.getElementById('cita_horario').value;
+            const mensaje = document.getElementById('cita_mensaje').value;
+
+            // Validar horario
+            if (!horario) {
+                showMessage('agendarCitaMessage', 'Por favor selecciona un horario', 'error');
+                return;
+            }
+
+            // Crear objeto de cita
+            const cita = {
+                id: generateId(),
+                nombre,
+                email,
+                telefono,
+                servicio,
+                fecha,
+                horario,
+                mensaje,
+                estado: 'Pendiente',
+                fechaRegistro: new Date().toISOString()
+            };
+
+            // Guardar en localStorage
+            const citas = getFromStorage(STORAGE_KEYS.CITAS);
+            citas.push(cita);
+            saveToStorage(STORAGE_KEYS.CITAS, citas);
+
+            // Mostrar mensaje de éxito
+            showMessage('agendarCitaMessage', 
+                `¡Cita agendada exitosamente! <br>
+                 Te esperamos el ${fecha} a las ${horario}.<br>
+                 Recibirás un correo de confirmación a ${email}`, 
+                'success'
+            );
+
+            // Limpiar formulario
+            setTimeout(() => {
+                closeAgendarCitaModal();
+            }, 3000);
+
+            // Log para GitHub (puedes ver esto en la consola del navegador)
+            console.log('Nueva cita registrada:', cita);
+        });
+
+        // ==================== MODAL: REGISTRO ====================
+
+        function openRegisterModal() {
+            const modal = document.getElementById('registerModal');
+            modal.classList.add('active');
+        }
+
+        function closeRegisterModal() {
+            const modal = document.getElementById('registerModal');
+            modal.classList.remove('active');
+            document.getElementById('registerForm').reset();
+            document.getElementById('registerMessage').innerHTML = '';
+        }
+
+        // Enviar formulario de registro
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const nombre = document.getElementById('register_nombre').value;
+            const email = document.getElementById('register_email').value;
+            const telefono = document.getElementById('register_telefono').value;
+            const password = document.getElementById('register_password').value;
+            const passwordConfirm = document.getElementById('register_password_confirm').value;
+
+            // Validar contraseñas
+            if (password !== passwordConfirm) {
+                showMessage('registerMessage', 'Las contraseñas no coinciden', 'error');
+                return;
+            }
+
+            // Verificar si el email ya existe
+            const usuarios = getFromStorage(STORAGE_KEYS.USUARIOS);
+            const emailExiste = usuarios.some(u => u.email === email);
+
+            if (emailExiste) {
+                showMessage('registerMessage', 'Este email ya está registrado', 'error');
+                return;
+            }
+
+            // Crear objeto de usuario
+            const usuario = {
+                id: generateId(),
+                nombre,
+                email,
+                telefono,
+                password, // En producción, esto debería estar encriptado
+                rol: 'paciente',
+                fechaRegistro: new Date().toISOString()
+            };
+
+            // Guardar en localStorage
+            usuarios.push(usuario);
+            saveToStorage(STORAGE_KEYS.USUARIOS, usuarios);
+
+            // Mostrar mensaje de éxito
+            showMessage('registerMessage', 
+                '¡Registro exitoso! Ya puedes iniciar sesión.', 
+                'success'
+            );
+
+            // Cambiar a login después de 2 segundos
+            setTimeout(() => {
+                switchToLogin();
+            }, 2000);
+
+            // Log para GitHub
+            console.log('Nuevo usuario registrado:', {
+                id: usuario.id,
+                nombre: usuario.nombre,
+                email: usuario.email
+            });
+        });
+
+        // ==================== MODAL: LOGIN ====================
+
+        function openLoginModal() {
+            const modal = document.getElementById('loginModal');
+            modal.classList.add('active');
+        }
+
+        function closeLoginModal() {
+            const modal = document.getElementById('loginModal');
+            modal.classList.remove('active');
+            document.getElementById('loginForm').reset();
+            document.getElementById('loginMessage').innerHTML = '';
+        }
+
+        // Enviar formulario de login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('login_email').value;
+            const password = document.getElementById('login_password').value;
+            const remember = document.getElementById('login_remember').checked;
+
+            // Buscar usuario
+            const usuarios = getFromStorage(STORAGE_KEYS.USUARIOS);
+            const usuario = usuarios.find(u => u.email === email && u.password === password);
+
+            if (!usuario) {
+                showMessage('loginMessage', 'Email o contraseña incorrectos', 'error');
+                return;
+            }
+
+            // Guardar sesión
+            saveToStorage(STORAGE_KEYS.USUARIO_ACTUAL, usuario);
+
+            // Mostrar mensaje de éxito
+            showMessage('loginMessage', 
+                `¡Bienvenido ${usuario.nombre}!<br>Redirigiendo al dashboard...`, 
+                'success'
+            );
+
+            // Log para GitHub
+            console.log('Usuario autenticado:', {
+                id: usuario.id,
+                nombre: usuario.nombre,
+                email: usuario.email
+            });
+
+            // En producción, aquí redirigirías al dashboard
+            setTimeout(() => {
+                closeLoginModal();
+                alert(`¡Bienvenido ${usuario.nombre}!\n\nEn la versión completa del sistema, serás redirigido al dashboard.`);
+            }, 2000);
+        });
+
+        // ==================== SWITCH ENTRE MODALS ====================
+
+        function switchToLogin() {
+            closeRegisterModal();
+            openLoginModal();
+        }
+
+        function switchToRegister() {
+            closeLoginModal();
+            openRegisterModal();
+        }
+
+        // ==================== MENÚ MÓVIL ====================
+
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Cerrar menú al hacer click en un enlace
+        document.querySelectorAll('#mobile-menu a, #mobile-menu button').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // ==================== FORMULARIO DE CONTACTO ====================
+
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('¡Gracias por tu mensaje! Te contactaremos pronto.');
+            e.target.reset();
+        });
+
+        // ==================== NAVEGACIÓN CON SCROLL ====================
+
+        let lastScroll = 0;
+        const nav = document.querySelector('nav');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                nav.classList.add('shadow-lg');
+            } else {
+                nav.classList.remove('shadow-lg');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // ==================== CERRAR MODALS AL HACER CLICK FUERA ====================
+
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+
+        // ==================== INICIALIZACIÓN ====================
+
+        // Crear algunos usuarios de prueba si no existen
+        if (getFromStorage(STORAGE_KEYS.USUARIOS).length === 0) {
+            const usuariosPrueba = [
+                {
+                    id: 'admin001',
+                    nombre: 'Admin Sistema',
+                    email: 'admin@sonrisanorte.com',
+                    telefono: '442 000 0000',
+                    password: 'admin123',
+                    rol: 'admin',
+                    fechaRegistro: new Date().toISOString()
+                },
+                {
+                    id: 'user001',
+                    nombre: 'Juan Pérez',
+                    email: 'paciente@test.com',
+                    telefono: '442 123 4567',
+                    password: '123456',
+                    rol: 'paciente',
+                    fechaRegistro: new Date().toISOString()
+                }
+            ];
+            saveToStorage(STORAGE_KEYS.USUARIOS, usuariosPrueba);
+            console.log('Usuarios de prueba creados');
+        }
+
+        // Log de inicialización
+        console.log('🦷 Sonrisa Norte - Sistema Inicializado');
+        console.log('Usuarios registrados:', getFromStorage(STORAGE_KEYS.USUARIOS).length);
+        console.log('Citas registradas:', getFromStorage(STORAGE_KEYS.CITAS).length);
+    </script>
+
+</body>
+</html>
