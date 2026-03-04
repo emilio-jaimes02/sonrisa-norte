@@ -1,264 +1,104 @@
-<!DOCTYPE html> <!-- Indica al navegador que el documento es HTML5 -->
-<html lang="es"> <!-- Elemento raíz del documento, idioma español -->
-<head>
-    <meta charset="UTF-8"> <!-- Permite usar caracteres especiales (acentos, ñ, etc.) -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hace el sitio responsive en móviles -->
-    <title>Sonrisa Norte - Clínica Dental</title> <!-- Título que aparece en la pestaña del navegador -->
+// ============================================================
+// SONRISA NORTE - GOOGLE APPS SCRIPT API
+// Script para conectar Google Sheets con la aplicación web
+// ============================================================
+
+// Configuración de las hojas de Google Sheets
+const CONFIG = {
+  SHEET_USUARIOS: 'Usuarios',     // Nombre de la hoja donde se guardan los usuarios
+  SHEET_CITAS: 'Citas',           // Nombre de la hoja donde se guardan las citas
+  SHEET_SERVICIOS: 'Servicios',   // Nombre de la hoja donde se guardan los servicios
+  SHEET_HORARIOS: 'Horarios'      // Nombre de la hoja donde se guardan los horarios
+};
+
+// Función que se ejecuta cuando llega una petición GET al Web App
+function doGet(e) {
+  return handleRequest(e); // Redirige la petición al manejador principal
+}
+
+// Función que se ejecuta cuando llega una petición POST al Web App
+function doPost(e) {
+  return handleRequest(e); // Redirige la petición al manejador principal
+}
+
+// Función central que procesa todas las peticiones
+function handleRequest(e) {
+  try {
+    const params = e.parameter; // Obtiene los parámetros enviados en la petición
+    const action = params.action; // Obtiene la acción que se quiere ejecutar
     
-    <!-- Descripción para SEO -->
-    <meta name="description" content="Sistema de gestión de citas dentales - Sonrisa Norte. Agenda tu cita en línea de forma rápida y segura.">
+    let result; // Variable donde se guardará la respuesta
     
-    <!-- Tailwind CSS CDN: framework de estilos -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    // Selecciona qué función ejecutar según la acción recibida
+    switch(action) {
+
+      // ==================== USUARIOS ====================
+      case 'registrarUsuario':
+        result = registrarUsuario(params); // Llama a la función de registro
+        break;
+      
+      case 'loginUsuario':
+        result = loginUsuario(params); // Llama a la función de login
+        break;
+      
+      case 'verificarEmail':
+        result = verificarEmail(params.email); // Verifica si existe el email
+        break;
+        
+      case 'obtenerUsuarios':
+        result = obtenerUsuarios(); // Obtiene todos los usuarios
+        break;
+      
+      // ==================== CITAS ====================
+      case 'agendarCita':
+        result = agendarCita(params); // Agenda una nueva cita
+        break;
+      
+      case 'obtenerCitas':
+        result = obtenerCitas(params.email); // Obtiene citas de un usuario
+        break;
+      
+      case 'obtenerTodasCitas':
+        result = obtenerTodasCitas(); // Obtiene todas las citas (admin)
+        break;
+        
+      case 'obtenerHorariosOcupados':
+        result = obtenerHorariosOcupados(params.fecha); // Obtiene horarios ocupados
+        break;
+      
+      case 'actualizarEstadoCita':
+        result = actualizarEstadoCita(params.id, params.estado); // Actualiza estado
+        break;
+        
+      case 'cancelarCita':
+        result = cancelarCita(params.id); // Cancela la cita
+        break;
+      
+      // ==================== SERVICIOS ====================
+      case 'obtenerServicios':
+        result = obtenerServicios(); // Obtiene los servicios
+        break;
+      
+      // ==================== HORARIOS ====================
+      case 'obtenerHorarios':
+        result = obtenerHorarios(); // Obtiene horarios disponibles
+        break;
+      
+      default:
+        result = { success: false, message: 'Acción no válida' }; // Acción desconocida
+    }
     
-    <!-- Font Awesome para iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts: precarga para mejorar rendimiento -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Fuente Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        /* Aplica la fuente Inter a todos los elementos */
-        * {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        /* ==================== ANIMACIONES ==================== */
-
-        /* Animación: aparece desde abajo */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0; /* invisible */
-                transform: translateY(30px); /* desplazado hacia abajo */
-            }
-            to {
-                opacity: 1; /* visible */
-                transform: translateY(0); /* posición normal */
-            }
-        }
-        
-        /* Animación simple de aparición */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        /* Animación desde la izquierda */
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        /* Animación desde la derecha */
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        /* Clases utilitarias para aplicar animaciones */
-        .animate-fadeInUp {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-        
-        .animate-fadeIn {
-            animation: fadeIn 1s ease-out forwards;
-        }
-        
-        .animate-slideInLeft {
-            animation: slideInLeft 0.8s ease-out forwards;
-        }
-        
-        .animate-slideInRight {
-            animation: slideInRight 0.8s ease-out forwards;
-        }
-        
-        /* Clases de delay para animaciones */
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.3s; }
-        .delay-400 { animation-delay: 0.4s; }
-        
-        /* ==================== GRADIENTES ==================== */
-
-        /* Gradiente azul personalizado */
-        .gradient-blue {
-            background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%);
-        }
-        
-        /* Gradiente verde/teal */
-        .gradient-teal {
-            background: linear-gradient(135deg, #14B8A6 0%, #10B981 100%);
-        }
-        
-        /* ==================== EFECTOS HOVER ==================== */
-
-        /* Transición suave para tarjetas */
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        /* Efecto al pasar el mouse sobre tarjetas */
-        .card-hover:hover {
-            transform: translateY(-10px); /* se eleva */
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* sombra */
-        }
-        
-        /* ==================== NAVBAR ==================== */
-
-        /* Barra de navegación con blur */
-        .nav-blur {
-            backdrop-filter: blur(10px);
-            background-color: rgba(255, 255, 255, 0.9);
-        }
-        
-        /* ==================== BOTÓN BRILLANTE ==================== */
-
-        .btn-shine {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* Efecto brillante que se mueve */
-        .btn-shine::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-        
-        /* Activa el brillo al hacer hover */
-        .btn-shine:hover::before {
-            left: 100%;
-        }
-        
-        /* Scroll suave al navegar por anclas */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* ==================== MODAL ==================== */
-
-        .modal {
-            display: none; /* oculto por defecto */
-            position: fixed;
-            z-index: 9999; /* encima de todo */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5); /* fondo oscuro */
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        /* Cuando el modal está activo */
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Contenido del modal */
-        .modal-content {
-            background-color: white;
-            margin: auto;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto; /* scroll interno */
-            animation: fadeInUp 0.3s ease-out;
-        }
-
-        /* ==================== HORARIOS ==================== */
-
-        .horario-btn {
-            transition: all 0.2s ease;
-        }
-
-        /* Hover solo si no está deshabilitado */
-        .horario-btn:hover:not(.disabled) {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
-        }
-
-        /* Estado seleccionado */
-        .horario-btn.selected {
-            background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%);
-            color: white;
-            border-color: #0EA5E9;
-        }
-
-        /* Estado deshabilitado */
-        .horario-btn.disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        /* ==================== SPINNER ==================== */
-
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #0EA5E9;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-
-        /* Animación de giro */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* ==================== ALERTAS ==================== */
-
-        .alert {
-            padding: 16px;
-            border-radius: 12px;
-            margin: 16px 0;
-            animation: fadeInUp 0.3s ease-out;
-        }
-
-        /* Mensaje de éxito */
-        .alert-success {
-            background-color: #D1FAE5;
-            color: #065F46;
-            border: 1px solid #10B981;
-        }
-
-        /* Mensaje de error */
-        .alert-error {
-            background-color: #FEE2E2;
-            color: #991B1B;
-            border: 1px solid #EF4444;
-        }
-    </style>
-</head>
-
-<!-- Cuerpo de la página -->
-<body class="bg-gray-50"> <!-- Fondo gris claro usando Tailwind -->
-
-<!-- ==================== NAVEGACIÓN ==================== -->
-<nav class="fixed w-full top-0 z-50 nav-blur border-b border-gray-200">
+    // Devuelve la respuesta en formato JSON
+    return ContentService
+      .createTextOutput(JSON.stringify(result)) // Convierte el resultado a texto JSON
+      .setMimeType(ContentService.MimeType.JSON); // Indica que la respuesta es JSON
+      
+  } catch(error) { // Si ocurre un error
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        success: false,
+        message: 'Error en el servidor: ' + error.toString() // Mensaje de error
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
