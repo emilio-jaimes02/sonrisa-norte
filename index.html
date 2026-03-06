@@ -9,7 +9,7 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Font Awesome para iconos -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Google Fonts -->
@@ -18,20 +18,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        * {
-            font-family: 'Inter', sans-serif;
-        }
+        * { font-family: 'Inter', sans-serif; }
         
-        /* Animaciones personalizadas */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         @keyframes fadeIn {
@@ -40,58 +31,28 @@
         }
         
         @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         
         @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         
-        .animate-fadeInUp {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-        
-        .animate-fadeIn {
-            animation: fadeIn 1s ease-out forwards;
-        }
-        
-        .animate-slideInLeft {
-            animation: slideInLeft 0.8s ease-out forwards;
-        }
-        
-        .animate-slideInRight {
-            animation: slideInRight 0.8s ease-out forwards;
-        }
+        .animate-fadeInUp { animation: fadeInUp 0.8s ease-out forwards; }
+        .animate-fadeIn { animation: fadeIn 1s ease-out forwards; }
+        .animate-slideInLeft { animation: slideInLeft 0.8s ease-out forwards; }
+        .animate-slideInRight { animation: slideInRight 0.8s ease-out forwards; }
         
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
         .delay-300 { animation-delay: 0.3s; }
         .delay-400 { animation-delay: 0.4s; }
         
-        /* Gradientes personalizados */
-        .gradient-blue {
-            background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%);
-        }
+        .gradient-blue { background: linear-gradient(135deg, #0EA5E9 0%, #14B8A6 100%); }
+        .gradient-teal { background: linear-gradient(135deg, #14B8A6 0%, #10B981 100%); }
         
-        .gradient-teal {
-            background: linear-gradient(135deg, #14B8A6 0%, #10B981 100%);
-        }
-        
-        /* Efectos hover */
         .card-hover {
             transition: all 0.3s ease;
         }
@@ -101,13 +62,11 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
         
-        /* Navegación fija con efecto blur */
         .nav-blur {
             backdrop-filter: blur(10px);
             background-color: rgba(255, 255, 255, 0.9);
         }
         
-        /* Botón CTA con efecto brillante */
         .btn-shine {
             position: relative;
             overflow: hidden;
@@ -128,12 +87,10 @@
             left: 100%;
         }
         
-        /* Smooth scroll */
         html {
             scroll-behavior: smooth;
         }
 
-        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
@@ -164,7 +121,6 @@
             animation: fadeInUp 0.3s ease-out;
         }
 
-        /* Horarios disponibles */
         .horario-btn {
             transition: all 0.2s ease;
         }
@@ -185,7 +141,6 @@
             cursor: not-allowed;
         }
 
-        /* Loading spinner */
         .spinner {
             border: 3px solid #f3f3f3;
             border-top: 3px solid #0EA5E9;
@@ -200,7 +155,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Success/Error messages */
         .alert {
             padding: 16px;
             border-radius: 12px;
@@ -223,11 +177,10 @@
 </head>
 <body class="bg-gray-50">
 
-    <!-- ==================== NAVEGACIÓN ==================== -->
+    <!-- NAVEGACIÓN -->
     <nav class="fixed w-full top-0 z-50 nav-blur border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
                 <div class="flex items-center space-x-3">
                     <div class="text-4xl">🦷</div>
                     <div>
@@ -236,7 +189,6 @@
                     </div>
                 </div>
                 
-                <!-- Menú Desktop -->
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#inicio" class="text-gray-700 hover:text-blue-500 font-medium transition">Inicio</a>
                     <a href="#servicios" class="text-gray-700 hover:text-blue-500 font-medium transition">Servicios</a>
@@ -248,14 +200,12 @@
                     </button>
                 </div>
                 
-                <!-- Botón Menú Móvil -->
                 <button id="mobile-menu-btn" class="md:hidden text-gray-700">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
         </div>
         
-        <!-- Menú Móvil -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
             <div class="px-4 py-6 space-y-4">
                 <a href="#inicio" class="block text-gray-700 hover:text-blue-500 font-medium">Inicio</a>
@@ -270,11 +220,10 @@
         </div>
     </nav>
 
-    <!-- ==================== HERO SECTION ==================== -->
+    <!-- HERO SECTION -->
     <section id="inicio" class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
             <div class="grid md:grid-cols-2 gap-12 items-center">
-                <!-- Texto -->
                 <div class="space-y-8 animate-slideInLeft">
                     <div class="inline-block">
                         <span class="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-semibold">
@@ -303,7 +252,6 @@
                         </a>
                     </div>
                     
-                    <!-- Stats -->
                     <div class="grid grid-cols-3 gap-6 pt-8 border-t border-gray-200">
                         <div>
                             <div class="text-3xl font-bold text-blue-500">500+</div>
@@ -320,14 +268,12 @@
                     </div>
                 </div>
                 
-                <!-- Imagen -->
                 <div class="relative animate-slideInRight">
                     <div class="relative z-10">
                         <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=800&q=80" 
                              alt="Dentista profesional" 
                              class="rounded-3xl shadow-2xl">
                     </div>
-                    <!-- Decoración -->
                     <div class="absolute -bottom-6 -right-6 w-72 h-72 bg-blue-200 rounded-3xl -z-0 opacity-50"></div>
                     <div class="absolute -top-6 -left-6 w-72 h-72 bg-teal-200 rounded-3xl -z-0 opacity-30"></div>
                 </div>
@@ -335,7 +281,7 @@
         </div>
     </section>
 
-    <!-- ==================== CARACTERÍSTICAS ==================== -->
+    <!-- CARACTERÍSTICAS -->
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
@@ -344,7 +290,6 @@
             </div>
             
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
                 <div class="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl card-hover border border-blue-100">
                     <div class="w-16 h-16 gradient-blue rounded-2xl flex items-center justify-center mb-6">
                         <i class="fas fa-calendar-check text-white text-2xl"></i>
@@ -355,7 +300,6 @@
                     </p>
                 </div>
                 
-                <!-- Feature 2 -->
                 <div class="bg-gradient-to-br from-teal-50 to-white p-8 rounded-2xl card-hover border border-teal-100">
                     <div class="w-16 h-16 gradient-teal rounded-2xl flex items-center justify-center mb-6">
                         <i class="fas fa-shield-alt text-white text-2xl"></i>
@@ -366,7 +310,6 @@
                     </p>
                 </div>
                 
-                <!-- Feature 3 -->
                 <div class="bg-gradient-to-br from-green-50 to-white p-8 rounded-2xl card-hover border border-green-100">
                     <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mb-6">
                         <i class="fas fa-user-md text-white text-2xl"></i>
@@ -380,7 +323,7 @@
         </div>
     </section>
 
-    <!-- ==================== SERVICIOS ==================== -->
+    <!-- SERVICIOS -->
     <section id="servicios" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
@@ -389,7 +332,6 @@
             </div>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Servicio 1 -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
                     <div class="text-5xl mb-4">🦷</div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-3">Limpieza Dental</h3>
@@ -400,7 +342,6 @@
                     </div>
                 </div>
                 
-                <!-- Servicio 2 -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
                     <div class="text-5xl mb-4">✨</div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-3">Blanqueamiento</h3>
@@ -411,7 +352,6 @@
                     </div>
                 </div>
                 
-                <!-- Servicio 3 -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
                     <div class="text-5xl mb-4">🔧</div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-3">Endodoncia</h3>
@@ -422,7 +362,6 @@
                     </div>
                 </div>
                 
-                <!-- Servicio 4 -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
                     <div class="text-5xl mb-4">😁</div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-3">Ortodoncia</h3>
@@ -433,7 +372,6 @@
                     </div>
                 </div>
                 
-                <!-- Servicio 5 -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
                     <div class="text-5xl mb-4">💎</div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-3">Resina Dental</h3>
@@ -444,7 +382,6 @@
                     </div>
                 </div>
                 
-                <!-- Servicio 6 -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
                     <div class="text-5xl mb-4">👑</div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-3">Corona Dental</h3>
@@ -464,7 +401,7 @@
         </div>
     </section>
 
-    <!-- ==================== CÓMO FUNCIONA ==================== -->
+    <!-- CÓMO FUNCIONA -->
     <section id="como-funciona" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
@@ -473,7 +410,6 @@
             </div>
             
             <div class="grid md:grid-cols-3 gap-12">
-                <!-- Paso 1 -->
                 <div class="text-center">
                     <div class="w-20 h-20 gradient-blue rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold">
                         1
@@ -484,7 +420,6 @@
                     </p>
                 </div>
                 
-                <!-- Paso 2 -->
                 <div class="text-center">
                     <div class="w-20 h-20 gradient-teal rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold">
                         2
@@ -495,7 +430,6 @@
                     </p>
                 </div>
                 
-                <!-- Paso 3 -->
                 <div class="text-center">
                     <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl font-bold">
                         3
@@ -509,7 +443,7 @@
         </div>
     </section>
 
-    <!-- ==================== CTA FINAL ==================== -->
+    <!-- CTA FINAL -->
     <section class="py-20 gradient-blue">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -531,11 +465,10 @@
         </div>
     </section>
 
-    <!-- ==================== CONTACTO ==================== -->
+    <!-- CONTACTO -->
     <section id="contacto" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-12">
-                <!-- Información de contacto -->
                 <div>
                     <h2 class="text-4xl font-bold text-gray-900 mb-6">Contáctanos</h2>
                     <p class="text-xl text-gray-600 mb-8">
@@ -585,7 +518,6 @@
                         </div>
                     </div>
                     
-                    <!-- Redes Sociales -->
                     <div class="mt-8">
                         <h3 class="font-bold text-gray-900 mb-4">Síguenos</h3>
                         <div class="flex space-x-4">
@@ -602,7 +534,6 @@
                     </div>
                 </div>
                 
-                <!-- Formulario -->
                 <div class="bg-gray-50 p-8 rounded-2xl">
                     <form id="contactForm" class="space-y-6">
                         <div>
@@ -640,11 +571,10 @@
         </div>
     </section>
 
-    <!-- ==================== FOOTER ==================== -->
+    <!-- FOOTER -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <!-- Columna 1 -->
                 <div>
                     <div class="flex items-center space-x-3 mb-4">
                         <div class="text-3xl">🦷</div>
@@ -658,7 +588,6 @@
                     </p>
                 </div>
                 
-                <!-- Columna 2 -->
                 <div>
                     <h4 class="font-bold mb-4">Enlaces Rápidos</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
@@ -669,7 +598,6 @@
                     </ul>
                 </div>
                 
-                <!-- Columna 3 -->
                 <div>
                     <h4 class="font-bold mb-4">Servicios</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
@@ -680,7 +608,6 @@
                     </ul>
                 </div>
                 
-                <!-- Columna 4 -->
                 <div>
                     <h4 class="font-bold mb-4">Legal</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
@@ -701,7 +628,7 @@
         </div>
     </footer>
 
-    <!-- ==================== MODAL: AGENDAR CITA ==================== -->
+    <!-- MODAL: AGENDAR CITA -->
     <div id="agendarCitaModal" class="modal">
         <div class="modal-content p-8">
             <div class="flex justify-between items-center mb-6">
@@ -714,7 +641,6 @@
             <div id="agendarCitaMessage"></div>
 
             <form id="agendarCitaForm" class="space-y-6">
-                <!-- Nombre Completo -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-2">Nombre Completo *</label>
                     <input type="text" id="cita_nombre" required 
@@ -722,7 +648,6 @@
                            placeholder="Juan Pérez García">
                 </div>
 
-                <!-- Email -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-2">Email *</label>
                     <input type="email" id="cita_email" required 
@@ -730,7 +655,6 @@
                            placeholder="juan@example.com">
                 </div>
 
-                <!-- Teléfono -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-2">Teléfono *</label>
                     <input type="tel" id="cita_telefono" required 
@@ -738,7 +662,6 @@
                            placeholder="442 123 4567">
                 </div>
 
-                <!-- Servicio -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-2">Servicio *</label>
                     <select id="cita_servicio" required 
@@ -753,14 +676,12 @@
                     </select>
                 </div>
 
-                <!-- Fecha -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-2">Fecha de la Cita *</label>
                     <input type="date" id="cita_fecha" required 
                            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition">
                 </div>
 
-                <!-- Horarios Disponibles -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-3">Horario Disponible *</label>
                     <div class="grid grid-cols-3 gap-3" id="horariosContainer">
@@ -769,7 +690,6 @@
                     <input type="hidden" id="cita_horario" required>
                 </div>
 
-                <!-- Mensaje/Motivo -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-2">Motivo de la Consulta (Opcional)</label>
                     <textarea id="cita_mensaje" rows="3" 
@@ -777,7 +697,6 @@
                               placeholder="Describe brevemente el motivo de tu consulta..."></textarea>
                 </div>
 
-                <!-- Botones -->
                 <div class="flex gap-4">
                     <button type="submit" 
                             class="flex-1 gradient-blue text-white py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition transform hover:scale-105">
@@ -793,7 +712,7 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL: REGISTRO ==================== -->
+    <!-- MODAL: REGISTRO -->
     <div id="registerModal" class="modal">
         <div class="modal-content p-8">
             <div class="flex justify-between items-center mb-6">
@@ -806,7 +725,6 @@
             <div id="registerMessage"></div>
 
             <form id="registerForm" class="space-y-6">
-                <!-- Nombre Completo -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-2">Nombre Completo *</label>
                     <input type="text" id="register_nombre" required 
@@ -814,7 +732,6 @@
                            placeholder="Juan Pérez García">
                 </div>
 
-                <!-- Email -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-2">Email *</label>
                     <input type="email" id="register_email" required 
@@ -822,7 +739,6 @@
                            placeholder="juan@example.com">
                 </div>
 
-                <!-- Teléfono -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-2">Teléfono *</label>
                     <input type="tel" id="register_telefono" required 
@@ -830,7 +746,6 @@
                            placeholder="442 123 4567">
                 </div>
 
-                <!-- Contraseña -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-2">Contraseña *</label>
                     <input type="password" id="register_password" required minlength="6"
@@ -838,7 +753,6 @@
                            placeholder="Mínimo 6 caracteres">
                 </div>
 
-                <!-- Confirmar Contraseña -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-2">Confirmar Contraseña *</label>
                     <input type="password" id="register_password_confirm" required minlength="6"
@@ -846,7 +760,6 @@
                            placeholder="Repite tu contraseña">
                 </div>
 
-                <!-- Términos y Condiciones -->
                 <div class="flex items-start">
                     <input type="checkbox" id="register_terms" required 
                            class="mt-1 w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500">
@@ -856,7 +769,6 @@
                     </label>
                 </div>
 
-                <!-- Botones -->
                 <div class="flex gap-4">
                     <button type="submit" 
                             class="flex-1 gradient-blue text-white py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition transform hover:scale-105">
@@ -869,7 +781,6 @@
                     </button>
                 </div>
 
-                <!-- Link a Login -->
                 <p class="text-center text-sm text-gray-600">
                     ¿Ya tienes cuenta? 
                     <button type="button" onclick="switchToLogin()" class="text-blue-500 font-semibold hover:underline">
@@ -880,7 +791,7 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL: LOGIN ==================== -->
+    <!-- MODAL: LOGIN -->
     <div id="loginModal" class="modal">
         <div class="modal-content p-8">
             <div class="flex justify-between items-center mb-6">
@@ -893,7 +804,6 @@
             <div id="loginMessage"></div>
 
             <form id="loginForm" class="space-y-6">
-                <!-- Email -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-2">Email *</label>
                     <input type="email" id="login_email" required 
@@ -901,7 +811,6 @@
                            placeholder="juan@example.com">
                 </div>
 
-                <!-- Contraseña -->
                 <div>
                     <label class="block text-sm font-bold text-gray-900 mb-2">Contraseña *</label>
                     <input type="password" id="login_password" required 
@@ -909,7 +818,6 @@
                            placeholder="Tu contraseña">
                 </div>
 
-                <!-- Recordarme y Olvidé contraseña -->
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <input type="checkbox" id="login_remember" 
@@ -923,7 +831,6 @@
                     </a>
                 </div>
 
-                <!-- Botones -->
                 <div class="flex gap-4">
                     <button type="submit" 
                             class="flex-1 gradient-blue text-white py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition transform hover:scale-105">
@@ -936,7 +843,6 @@
                     </button>
                 </div>
 
-                <!-- Link a Registro -->
                 <p class="text-center text-sm text-gray-600">
                     ¿No tienes cuenta? 
                     <button type="button" onclick="switchToRegister()" class="text-blue-500 font-semibold hover:underline">
@@ -947,380 +853,424 @@
         </div>
     </div>
 
-    <!-- ==================== JAVASCRIPT ==================== -->
+    <!-- JAVASCRIPT -->
     <script>
-        // ==================== CONFIGURACIÓN INICIAL ====================
+// ============================================================
+// ⚠️⚠️⚠️ CONFIGURACIÓN OBLIGATORIA ⚠️⚠️⚠️
+// 
+// REEMPLAZA LA URL EN LA LÍNEA DE ABAJO CON TU URL DE GOOGLE APPS SCRIPT
+// (La que obtienes al implementar como Web App)
+//
+// Ejemplo de cómo debe quedar:
+// const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXXXXXXXXXXXXX/exec';
+// ============================================================
+
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhcLitknOX8KV8SzBoIxAZBdNWY1LDnRKMX9T9alZF5zAdmuPfyLEiaNWcSETgJ9fF/exec';
+
+// ============================================================
+// NO EDITES NADA MÁS ABAJO DE ESTA LÍNEA
+// ============================================================
+
+const today = new Date().toISOString().split('T')[0];
+let HORARIOS_CONSULTORIO = ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
+
+const STORAGE_KEYS = {
+    USUARIO_ACTUAL: 'sonrisa_norte_usuario_actual'
+};
+
+async function llamarAPI(action, params = {}) {
+    try {
+        params.action = action;
+        const url = GOOGLE_SCRIPT_URL + '?' + new URLSearchParams(params).toString();
+        console.log('🔵 Llamando a API:', action);
+        const response = await fetch(url, { method: 'GET', redirect: 'follow' });
+        if (!response.ok) throw new Error('Error HTTP ' + response.status);
+        const data = await response.json();
+        console.log('🔵 Respuesta:', data);
+        return data;
+    } catch (error) {
+        console.error('🔴 Error en API:', error);
+        return { success: false, message: 'Error de conexión: ' + error.message };
+    }
+}
+
+function verificarConfiguracion() {
+    if (GOOGLE_SCRIPT_URL === 'PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT' || GOOGLE_SCRIPT_URL.trim() === '') {
+        console.error('❌ ERROR: URL de Google Apps Script no configurada');
+        console.error('Edita el HTML y busca: PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT');
+        return false;
+    }
+    return true;
+}
+
+function getFromStorage(key) {
+    try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    } catch (error) {
+        return null;
+    }
+}
+
+function saveToStorage(key, data) {
+    try {
+        localStorage.setItem(key, JSON.stringify(data));
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+function showMessage(elementId, message, type = 'success') {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+    const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+    element.innerHTML = `<div class="alert ${alertClass}"><i class="fas fa-${icon} mr-2"></i>${message}</div>`;
+    setTimeout(() => { element.innerHTML = ''; }, 5000);
+}
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function formatearFecha(fecha) {
+    const date = new Date(fecha + 'T00:00:00');
+    return date.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+function mostrarCargando(elementId, mostrar = true) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    if (mostrar) {
+        element.innerHTML = '<div class="text-center py-4"><div class="spinner mx-auto"></div><p class="text-gray-600 mt-3">Cargando...</p></div>';
+    } else {
+        element.innerHTML = '';
+    }
+}
+
+async function getHorariosOcupados(fecha) {
+    const resultado = await llamarAPI('obtenerHorariosOcupados', { fecha });
+    return resultado.success ? resultado.horariosOcupados : [];
+}
+
+async function generarHorariosDisponibles(fecha = null) {
+    const container = document.getElementById('horariosContainer');
+    if (!container) return;
+    
+    if (!fecha) {
+        container.innerHTML = '<div class="col-span-3 text-center text-gray-500 py-4"><i class="fas fa-calendar-day text-3xl mb-2"></i><p>Selecciona una fecha para ver los horarios disponibles</p></div>';
+        return;
+    }
+    
+    container.innerHTML = '<div class="col-span-3 text-center py-4"><div class="spinner mx-auto"></div><p class="text-gray-600 mt-3">Consultando disponibilidad...</p></div>';
+    
+    const horariosOcupados = await getHorariosOcupados(fecha);
+    container.innerHTML = '';
+    
+    HORARIOS_CONSULTORIO.forEach(horario => {
+        const isOcupado = horariosOcupados.includes(horario);
+        const button = document.createElement('button');
+        button.type = 'button';
         
-        // Configurar fecha mínima (hoy)
-        const today = new Date().toISOString().split('T')[0];
+        if (isOcupado) {
+            button.className = 'horario-btn disabled px-4 py-3 border-2 border-red-200 rounded-xl text-sm font-semibold text-red-400 bg-red-50 cursor-not-allowed';
+            button.innerHTML = horario + '<br><span class="text-xs">Ocupado</span>';
+            button.disabled = true;
+        } else {
+            button.className = 'horario-btn px-4 py-3 border-2 border-gray-300 rounded-xl text-sm font-semibold text-gray-700 hover:border-blue-500 hover:bg-blue-50 transition';
+            button.innerHTML = horario + '<br><span class="text-xs text-green-600">Disponible</span>';
+            button.onclick = () => seleccionarHorario(horario, button);
+        }
         
-        // Horarios disponibles
-        const horariosDisponibles = [
-            '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-            '12:00', '14:00', '14:30', '15:00', '15:30', '16:00',
-            '16:30', '17:00', '17:30', '18:00'
-        ];
+        container.appendChild(button);
+    });
+    
+    const disponibles = HORARIOS_CONSULTORIO.length - horariosOcupados.length;
+    const resumen = document.createElement('div');
+    resumen.className = 'col-span-3 mt-4 p-3 bg-blue-50 rounded-xl text-sm text-center';
+    resumen.innerHTML = '<i class="fas fa-info-circle text-blue-500 mr-2"></i><span class="font-semibold">' + disponibles + '</span> horarios disponibles de <span class="font-semibold">' + HORARIOS_CONSULTORIO.length + '</span> totales';
+    container.appendChild(resumen);
+}
 
-        // LocalStorage keys
-        const STORAGE_KEYS = {
-            USUARIOS: 'sonrisa_norte_usuarios',
-            CITAS: 'sonrisa_norte_citas',
-            USUARIO_ACTUAL: 'sonrisa_norte_usuario_actual'
-        };
+function seleccionarHorario(horario, button) {
+    document.querySelectorAll('.horario-btn:not(.disabled)').forEach(btn => {
+        btn.classList.remove('selected','border-blue-500','bg-blue-500','text-white');
+        btn.classList.add('border-gray-300','text-gray-700');
+    });
+    button.classList.add('selected','border-blue-500','bg-blue-500','text-white');
+    button.classList.remove('border-gray-300','text-gray-700');
+    document.getElementById('cita_horario').value = horario;
+    console.log('Horario seleccionado:', horario);
+}
 
-        // ==================== FUNCIONES AUXILIARES ====================
-
-        // Obtener datos de localStorage
-        function getFromStorage(key) {
-            const data = localStorage.getItem(key);
-            return data ? JSON.parse(data) : [];
-        }
-
-        // Guardar datos en localStorage
-        function saveToStorage(key, data) {
-            localStorage.setItem(key, JSON.stringify(data));
-        }
-
-        // Generar ID único
-        function generateId() {
-            return Date.now().toString(36) + Math.random().toString(36).substr(2);
-        }
-
-        // Mostrar mensaje
-        function showMessage(elementId, message, type = 'success') {
-            const element = document.getElementById(elementId);
-            const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
-            element.innerHTML = `
-                <div class="alert ${alertClass}">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-2"></i>
-                    ${message}
-                </div>
-            `;
-            setTimeout(() => {
-                element.innerHTML = '';
-            }, 5000);
-        }
-
-        // ==================== MODAL: AGENDAR CITA ====================
-
-        function openAgendarCitaModal() {
-            const modal = document.getElementById('agendarCitaModal');
-            modal.classList.add('active');
-            generarHorarios();
-            
-            // Configurar fecha mínima
-            document.getElementById('cita_fecha').min = today;
-        }
-
-        function closeAgendarCitaModal() {
-            const modal = document.getElementById('agendarCitaModal');
-            modal.classList.remove('active');
-            document.getElementById('agendarCitaForm').reset();
-            document.getElementById('agendarCitaMessage').innerHTML = '';
-        }
-
-        // Generar botones de horarios
-        function generarHorarios() {
-            const container = document.getElementById('horariosContainer');
-            container.innerHTML = '';
-
-            horariosDisponibles.forEach(horario => {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.className = 'horario-btn px-4 py-3 border-2 border-gray-300 rounded-xl text-sm font-semibold text-gray-700 hover:border-blue-500';
-                button.textContent = horario;
-                button.onclick = () => seleccionarHorario(horario, button);
-                container.appendChild(button);
-            });
-        }
-
-        // Seleccionar horario
-        function seleccionarHorario(horario, button) {
-            // Remover selección anterior
-            document.querySelectorAll('.horario-btn').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-
-            // Seleccionar nuevo horario
-            button.classList.add('selected');
-            document.getElementById('cita_horario').value = horario;
-        }
-
-        // Enviar formulario de cita
-        document.getElementById('agendarCitaForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const nombre = document.getElementById('cita_nombre').value;
-            const email = document.getElementById('cita_email').value;
-            const telefono = document.getElementById('cita_telefono').value;
-            const servicio = document.getElementById('cita_servicio').value;
-            const fecha = document.getElementById('cita_fecha').value;
-            const horario = document.getElementById('cita_horario').value;
-            const mensaje = document.getElementById('cita_mensaje').value;
-
-            // Validar horario
-            if (!horario) {
-                showMessage('agendarCitaMessage', 'Por favor selecciona un horario', 'error');
-                return;
-            }
-
-            // Crear objeto de cita
-            const cita = {
-                id: generateId(),
-                nombre,
-                email,
-                telefono,
-                servicio,
-                fecha,
-                horario,
-                mensaje,
-                estado: 'Pendiente',
-                fechaRegistro: new Date().toISOString()
-            };
-
-            // Guardar en localStorage
-            const citas = getFromStorage(STORAGE_KEYS.CITAS);
-            citas.push(cita);
-            saveToStorage(STORAGE_KEYS.CITAS, citas);
-
-            // Mostrar mensaje de éxito
-            showMessage('agendarCitaMessage', 
-                `¡Cita agendada exitosamente! <br>
-                 Te esperamos el ${fecha} a las ${horario}.<br>
-                 Recibirás un correo de confirmación a ${email}`, 
-                'success'
-            );
-
-            // Limpiar formulario
-            setTimeout(() => {
-                closeAgendarCitaModal();
-            }, 3000);
-
-            // Log para GitHub (puedes ver esto en la consola del navegador)
-            console.log('Nueva cita registrada:', cita);
+function openAgendarCitaModal() {
+    const modal = document.getElementById('agendarCitaModal');
+    if (!modal) return;
+    if (!verificarConfiguracion()) {
+        alert('⚠️ Error: Debes configurar la URL de Google Apps Script en el código HTML.\n\nBusca: PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT\ny reemplázala con tu URL.');
+        return;
+    }
+    modal.classList.add('active');
+    const fechaInput = document.getElementById('cita_fecha');
+    if (fechaInput) {
+        fechaInput.min = today;
+        fechaInput.addEventListener('change', function() {
+            generarHorariosDisponibles(this.value);
+            document.getElementById('cita_horario').value = '';
         });
+    }
+    generarHorariosDisponibles(null);
+}
 
-        // ==================== MODAL: REGISTRO ====================
+function closeAgendarCitaModal() {
+    const modal = document.getElementById('agendarCitaModal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    document.getElementById('agendarCitaForm').reset();
+    document.getElementById('agendarCitaMessage').innerHTML = '';
+    document.getElementById('cita_horario').value = '';
+}
 
-        function openRegisterModal() {
-            const modal = document.getElementById('registerModal');
-            modal.classList.add('active');
-        }
+async function handleAgendarCita(e) {
+    e.preventDefault();
+    
+    const nombre = document.getElementById('cita_nombre').value.trim();
+    const email = document.getElementById('cita_email').value.trim();
+    const telefono = document.getElementById('cita_telefono').value.trim();
+    const servicio = document.getElementById('cita_servicio').value;
+    const fecha = document.getElementById('cita_fecha').value;
+    const horario = document.getElementById('cita_horario').value;
+    const mensaje = document.getElementById('cita_mensaje').value.trim();
+    
+    if (!nombre || !email || !telefono || !servicio || !fecha || !horario) {
+        showMessage('agendarCitaMessage', 'Por favor completa todos los campos obligatorios', 'error');
+        return;
+    }
+    
+    if (!isValidEmail(email)) {
+        showMessage('agendarCitaMessage', 'Por favor ingresa un email válido', 'error');
+        return;
+    }
+    
+    mostrarCargando('agendarCitaMessage', true);
+    
+    const resultado = await llamarAPI('agendarCita', {
+        nombre, email, telefono, servicio, fecha, horario, mensaje
+    });
+    
+    mostrarCargando('agendarCitaMessage', false);
+    
+    if (resultado.success) {
+        showMessage('agendarCitaMessage', 
+            '✅ <strong>¡Cita agendada exitosamente!</strong><br><br>' +
+            '📅 Fecha: ' + formatearFecha(fecha) + '<br>' +
+            '🕐 Hora: ' + horario + '<br>' +
+            '📧 Confirmación a: ' + email + '<br><br>' +
+            '<small>ID: ' + resultado.cita.id + '</small>', 
+            'success'
+        );
+        console.log('✅ Cita guardada en Google Sheets:', resultado.cita);
+        setTimeout(() => closeAgendarCitaModal(), 4000);
+    } else {
+        showMessage('agendarCitaMessage', '❌ ' + resultado.message, 'error');
+    }
+}
 
-        function closeRegisterModal() {
-            const modal = document.getElementById('registerModal');
-            modal.classList.remove('active');
-            document.getElementById('registerForm').reset();
-            document.getElementById('registerMessage').innerHTML = '';
-        }
+function openRegisterModal() {
+    const modal = document.getElementById('registerModal');
+    if (modal) modal.classList.add('active');
+}
 
-        // Enviar formulario de registro
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+function closeRegisterModal() {
+    const modal = document.getElementById('registerModal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    document.getElementById('registerForm').reset();
+    document.getElementById('registerMessage').innerHTML = '';
+}
 
-            const nombre = document.getElementById('register_nombre').value;
-            const email = document.getElementById('register_email').value;
-            const telefono = document.getElementById('register_telefono').value;
-            const password = document.getElementById('register_password').value;
-            const passwordConfirm = document.getElementById('register_password_confirm').value;
+async function handleRegistro(e) {
+    e.preventDefault();
+    
+    const nombre = document.getElementById('register_nombre').value.trim();
+    const email = document.getElementById('register_email').value.trim();
+    const telefono = document.getElementById('register_telefono').value.trim();
+    const password = document.getElementById('register_password').value;
+    const passwordConfirm = document.getElementById('register_password_confirm').value;
+    
+    if (!nombre || !email || !telefono || !password || !passwordConfirm) {
+        showMessage('registerMessage', 'Por favor completa todos los campos', 'error');
+        return;
+    }
+    
+    if (!isValidEmail(email)) {
+        showMessage('registerMessage', 'Por favor ingresa un email válido', 'error');
+        return;
+    }
+    
+    if (password.length < 6) {
+        showMessage('registerMessage', 'La contraseña debe tener al menos 6 caracteres', 'error');
+        return;
+    }
+    
+    if (password !== passwordConfirm) {
+        showMessage('registerMessage', 'Las contraseñas no coinciden', 'error');
+        return;
+    }
+    
+    if (!verificarConfiguracion()) {
+        showMessage('registerMessage', 'Error de configuración. Revisa la consola.', 'error');
+        return;
+    }
+    
+    mostrarCargando('registerMessage', true);
+    
+    const resultado = await llamarAPI('registrarUsuario', {
+        nombre, email, telefono, password, rol: 'paciente'
+    });
+    
+    mostrarCargando('registerMessage', false);
+    
+    if (resultado.success) {
+        showMessage('registerMessage', 
+            '✅ <strong>¡Registro exitoso!</strong><br><br>' +
+            'Bienvenido ' + nombre + '!<br>' +
+            'Ya puedes iniciar sesión.<br><br>' +
+            'Redirigiendo...', 
+            'success'
+        );
+        console.log('✅ Usuario registrado en Google Sheets:', resultado.usuario);
+        setTimeout(() => switchToLogin(), 2500);
+    } else {
+        showMessage('registerMessage', '❌ ' + resultado.message, 'error');
+    }
+}
 
-            // Validar contraseñas
-            if (password !== passwordConfirm) {
-                showMessage('registerMessage', 'Las contraseñas no coinciden', 'error');
-                return;
-            }
+function openLoginModal() {
+    const modal = document.getElementById('loginModal');
+    if (modal) modal.classList.add('active');
+}
 
-            // Verificar si el email ya existe
-            const usuarios = getFromStorage(STORAGE_KEYS.USUARIOS);
-            const emailExiste = usuarios.some(u => u.email === email);
+function closeLoginModal() {
+    const modal = document.getElementById('loginModal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    document.getElementById('loginForm').reset();
+    document.getElementById('loginMessage').innerHTML = '';
+}
 
-            if (emailExiste) {
-                showMessage('registerMessage', 'Este email ya está registrado', 'error');
-                return;
-            }
-
-            // Crear objeto de usuario
-            const usuario = {
-                id: generateId(),
-                nombre,
-                email,
-                telefono,
-                password, // En producción, esto debería estar encriptado
-                rol: 'paciente',
-                fechaRegistro: new Date().toISOString()
-            };
-
-            // Guardar en localStorage
-            usuarios.push(usuario);
-            saveToStorage(STORAGE_KEYS.USUARIOS, usuarios);
-
-            // Mostrar mensaje de éxito
-            showMessage('registerMessage', 
-                '¡Registro exitoso! Ya puedes iniciar sesión.', 
-                'success'
-            );
-
-            // Cambiar a login después de 2 segundos
-            setTimeout(() => {
-                switchToLogin();
-            }, 2000);
-
-            // Log para GitHub
-            console.log('Nuevo usuario registrado:', {
-                id: usuario.id,
-                nombre: usuario.nombre,
-                email: usuario.email
-            });
-        });
-
-        // ==================== MODAL: LOGIN ====================
-
-        function openLoginModal() {
-            const modal = document.getElementById('loginModal');
-            modal.classList.add('active');
-        }
-
-        function closeLoginModal() {
-            const modal = document.getElementById('loginModal');
-            modal.classList.remove('active');
-            document.getElementById('loginForm').reset();
-            document.getElementById('loginMessage').innerHTML = '';
-        }
-
-        // Enviar formulario de login
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const email = document.getElementById('login_email').value;
-            const password = document.getElementById('login_password').value;
-            const remember = document.getElementById('login_remember').checked;
-
-            // Buscar usuario
-            const usuarios = getFromStorage(STORAGE_KEYS.USUARIOS);
-            const usuario = usuarios.find(u => u.email === email && u.password === password);
-
-            if (!usuario) {
-                showMessage('loginMessage', 'Email o contraseña incorrectos', 'error');
-                return;
-            }
-
-            // Guardar sesión
-            saveToStorage(STORAGE_KEYS.USUARIO_ACTUAL, usuario);
-
-            // Mostrar mensaje de éxito
-            showMessage('loginMessage', 
-                `¡Bienvenido ${usuario.nombre}!<br>Redirigiendo al dashboard...`, 
-                'success'
-            );
-
-            // Log para GitHub
-            console.log('Usuario autenticado:', {
-                id: usuario.id,
-                nombre: usuario.nombre,
-                email: usuario.email
-            });
-
-            // En producción, aquí redirigirías al dashboard
-            setTimeout(() => {
-                closeLoginModal();
-                alert(`¡Bienvenido ${usuario.nombre}!\n\nEn la versión completa del sistema, serás redirigido al dashboard.`);
-            }, 2000);
-        });
-
-        // ==================== SWITCH ENTRE MODALS ====================
-
-        function switchToLogin() {
-            closeRegisterModal();
-            openLoginModal();
-        }
-
-        function switchToRegister() {
+async function handleLogin(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('login_email').value.trim().toLowerCase();
+    const password = document.getElementById('login_password').value;
+    
+    if (!email || !password) {
+        showMessage('loginMessage', 'Por favor completa todos los campos', 'error');
+        return;
+    }
+    
+    if (!verificarConfiguracion()) {
+        showMessage('loginMessage', 'Error de configuración. Revisa la consola.', 'error');
+        return;
+    }
+    
+    mostrarCargando('loginMessage', true);
+    
+    const resultado = await llamarAPI('loginUsuario', { email, password });
+    
+    mostrarCargando('loginMessage', false);
+    
+    if (resultado.success) {
+        saveToStorage(STORAGE_KEYS.USUARIO_ACTUAL, resultado.usuario);
+        showMessage('loginMessage', 
+            '✅ <strong>¡Bienvenido ' + resultado.usuario.nombre + '!</strong><br><br>Redirigiendo...', 
+            'success'
+        );
+        console.log('✅ Login exitoso:', resultado.usuario);
+        setTimeout(() => {
             closeLoginModal();
-            openRegisterModal();
+            alert('Dashboard de ' + resultado.usuario.nombre + '\n✅ Conectado a Google Sheets');
+        }, 2000);
+    } else {
+        showMessage('loginMessage', '❌ ' + resultado.message, 'error');
+    }
+}
+
+function switchToLogin() {
+    closeRegisterModal();
+    setTimeout(() => openLoginModal(), 300);
+}
+
+function switchToRegister() {
+    closeLoginModal();
+    setTimeout(() => openRegisterModal(), 300);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🦷 ========================================');
+    console.log('   SONRISA NORTE - GOOGLE SHEETS');
+    console.log('   ========================================');
+    
+    if (!verificarConfiguracion()) {
+        console.error('❌ Configuración incompleta - URL no encontrada');
+        console.error('Busca en el código: PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT');
+    } else {
+        console.log('✅ URL configurada correctamente');
+    }
+    
+    console.log('✅ Horarios disponibles:', HORARIOS_CONSULTORIO.length);
+    
+    document.getElementById('agendarCitaForm').addEventListener('submit', handleAgendarCita);
+    document.getElementById('registerForm').addEventListener('submit', handleRegistro);
+    document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    
+    window.addEventListener('click', e => {
+        if (e.target.classList.contains('modal')) {
+            e.target.classList.remove('active');
         }
-
-        // ==================== MENÚ MÓVIL ====================
-
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-        
-        // Cerrar menú al hacer click en un enlace
+    });
+    
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
         document.querySelectorAll('#mobile-menu a, #mobile-menu button').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-            });
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
         });
-
-        // ==================== FORMULARIO DE CONTACTO ====================
-
-        document.getElementById('contactForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('¡Gracias por tu mensaje! Te contactaremos pronto.');
-            e.target.reset();
-        });
-
-        // ==================== NAVEGACIÓN CON SCROLL ====================
-
-        let lastScroll = 0;
-        const nav = document.querySelector('nav');
-        
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > 100) {
-                nav.classList.add('shadow-lg');
-            } else {
-                nav.classList.remove('shadow-lg');
-            }
-            
-            lastScroll = currentScroll;
-        });
-
-        // ==================== CERRAR MODALS AL HACER CLICK FUERA ====================
-
-        window.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal')) {
-                e.target.classList.remove('active');
-            }
-        });
-
-        // ==================== INICIALIZACIÓN ====================
-
-        // Crear algunos usuarios de prueba si no existen
-        if (getFromStorage(STORAGE_KEYS.USUARIOS).length === 0) {
-            const usuariosPrueba = [
-                {
-                    id: 'admin001',
-                    nombre: 'Admin Sistema',
-                    email: 'admin@sonrisanorte.com',
-                    telefono: '442 000 0000',
-                    password: 'admin123',
-                    rol: 'admin',
-                    fechaRegistro: new Date().toISOString()
-                },
-                {
-                    id: 'user001',
-                    nombre: 'Juan Pérez',
-                    email: 'paciente@test.com',
-                    telefono: '442 123 4567',
-                    password: '123456',
-                    rol: 'paciente',
-                    fechaRegistro: new Date().toISOString()
-                }
-            ];
-            saveToStorage(STORAGE_KEYS.USUARIOS, usuariosPrueba);
-            console.log('Usuarios de prueba creados');
+    }
+    
+    document.getElementById('contactForm').addEventListener('submit', e => {
+        e.preventDefault();
+        alert('¡Gracias por tu mensaje!');
+        e.target.reset();
+    });
+    
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 100) {
+            nav.classList.add('shadow-lg');
+        } else {
+            nav.classList.remove('shadow-lg');
         }
+    });
+    
+    console.log('✅ Sistema inicializado correctamente');
+    console.log('🦷 ========================================');
+});
 
-        // Log de inicialización
-        console.log('🦷 Sonrisa Norte - Sistema Inicializado');
-        console.log('Usuarios registrados:', getFromStorage(STORAGE_KEYS.USUARIOS).length);
-        console.log('Citas registradas:', getFromStorage(STORAGE_KEYS.CITAS).length);
-    <script src="script-google-sheets.js">
+window.openAgendarCitaModal = openAgendarCitaModal;
+window.closeAgendarCitaModal = closeAgendarCitaModal;
+window.openRegisterModal = openRegisterModal;
+window.closeRegisterModal = closeRegisterModal;
+window.openLoginModal = openLoginModal;
+window.closeLoginModal = closeLoginModal;
+window.switchToLogin = switchToLogin;
+window.switchToRegister = switchToRegister;
+
+console.log('✅ Sonrisa Norte v2.0 - Script integrado cargado');
+    </script>
 
 </body>
 </html>
