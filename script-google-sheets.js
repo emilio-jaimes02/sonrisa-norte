@@ -3,7 +3,7 @@
 // Conectado a Google Sheets como base de datos
 // ============================================================
 
-// ==================== CONFIGURACIÓN ====================
+// ==================== CONFIGURACIÓN ====================___
 
 // ⚠️ IMPORTANTE: Reemplaza esta URL con la URL de tu Google Apps Script Web App
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhcLitknOX8KV8SzBoIxAZBdNWY1LDnRKMX9T9alZF5zAdmuPfyLEiaNWcSETgJ9fF/exec';
