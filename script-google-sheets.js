@@ -1,40 +1,36 @@
 // ============================================================
 // SONRISA NORTE - SCRIPT CON GOOGLE SHEETS
-// Conectado a Google Sheets como base de datos
 // ============================================================
 
-// ==================== CONFIGURACIÓN ====================
+// ⚠️⚠️⚠️ INSTRUCCIÓN IMPORTANTE - LEE ESTO ⚠️⚠️⚠️
+// 
+// EN LA LÍNEA 15 ABAJO, REEMPLAZA ESTA URL:
+// 'PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT'
+//
+// CON LA URL QUE OBTUVISTE DE GOOGLE APPS SCRIPT
+// (La que termina en /exec)
+//
+// Ejemplo de cómo debe quedar:
+// const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXXXXXXXXXXXXX/exec';
 
-// ⚠️ IMPORTANTE: Reemplaza esta URL con la URL de tu Google Apps Script Web App
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhcLitknOX8KV8SzBoIxAZBdNWY1LDnRKMX9T9alZF5zAdmuPfyLEiaNWcSETgJ9fF/exec';
 
-// Ejemplo de URL correcta:
-// const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx.../exec';
+// ============================================================
+// NO EDITES NADA MÁS ABAJO DE ESTA LÍNEA
+// ============================================================
 
-// Configurar fecha mínima (hoy)
 const today = new Date().toISOString().split('T')[0];
-
-// Horarios del consultorio (se sincronizarán con Google Sheets)
 let HORARIOS_CONSULTORIO = [];
 
-// LocalStorage keys (para caché temporal)
 const STORAGE_KEYS = {
-  USUARIO_ACTUAL: 'sonrisa_norte_usuario_actual',
-  CACHE_HORARIOS: 'sonrisa_norte_cache_horarios',
-  CACHE_SERVICIOS: 'sonrisa_norte_cache_servicios'
+    USUARIO_ACTUAL: 'sonrisa_norte_usuario_actual',
+    CACHE_HORARIOS: 'sonrisa_norte_cache_horarios',
+    CACHE_SERVICIOS: 'sonrisa_norte_cache_servicios'
 };
 
-// ==================== FUNCIONES DE API ====================
-
-/**
- * Hacer petición a Google Sheets
- */
 async function llamarAPI(action, params = {}) {
     try {
-        // Agregar la acción a los parámetros
         params.action = action;
-        
-        // Construir URL con parámetros
         const url = GOOGLE_SCRIPT_URL + '?' + new URLSearchParams(params).toString();
         
         const response = await fetch(url, {
@@ -58,25 +54,15 @@ async function llamarAPI(action, params = {}) {
     }
 }
 
-/**
- * Verificar que la URL de Google Script esté configurada
- */
 function verificarConfiguracion() {
-    if (GOOGLE_SCRIPT_URL === 'TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI' || 
+    if (GOOGLE_SCRIPT_URL === 'PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT' || 
         GOOGLE_SCRIPT_URL.trim() === '') {
         console.error('❌ ERROR: URL de Google Apps Script no configurada');
-        console.log('📝 Pasos para configurar:');
-        console.log('1. Abre tu Google Sheet');
-        console.log('2. Ve a Extensiones → Apps Script');
-        console.log('3. Copia el código de google-apps-script.gs');
-        console.log('4. Implementa como Web App');
-        console.log('5. Copia la URL y pégala en la línea 8 de este script');
+        console.error('📝 Edita script-google-sheets.js línea 15 y pega tu URL');
         return false;
     }
     return true;
 }
-
-// ==================== FUNCIONES AUXILIARES ====================
 
 function getFromStorage(key) {
     try {
@@ -144,25 +130,17 @@ function mostrarCargando(elementId, mostrar = true) {
     }
 }
 
-// ==================== GESTIÓN DE HORARIOS ====================
-
-/**
- * Obtener horarios del consultorio desde Google Sheets
- */
 async function cargarHorarios() {
-    // Intentar obtener del caché primero
     const cache = getFromStorage(STORAGE_KEYS.CACHE_HORARIOS);
-    if (cache && cache.timestamp > Date.now() - 3600000) { // 1 hora de caché
+    if (cache && cache.timestamp > Date.now() - 3600000) {
         HORARIOS_CONSULTORIO = cache.horarios;
         return cache.horarios;
     }
     
-    // Si no hay caché, obtener de Google Sheets
     const resultado = await llamarAPI('obtenerHorarios');
     
     if (resultado.success) {
         HORARIOS_CONSULTORIO = resultado.horarios;
-        // Guardar en caché
         saveToStorage(STORAGE_KEYS.CACHE_HORARIOS, {
             horarios: resultado.horarios,
             timestamp: Date.now()
@@ -170,7 +148,6 @@ async function cargarHorarios() {
         return resultado.horarios;
     }
     
-    // Si falla, usar horarios por defecto
     HORARIOS_CONSULTORIO = [
         '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
         '12:00', '12:30', '14:00', '14:30', '15:00', '15:30',
@@ -179,9 +156,6 @@ async function cargarHorarios() {
     return HORARIOS_CONSULTORIO;
 }
 
-/**
- * Obtener horarios ocupados de Google Sheets
- */
 async function getHorariosOcupados(fecha) {
     const resultado = await llamarAPI('obtenerHorariosOcupados', { fecha });
     
@@ -192,9 +166,6 @@ async function getHorariosOcupados(fecha) {
     return [];
 }
 
-/**
- * Generar botones de horarios con disponibilidad
- */
 async function generarHorariosDisponibles(fecha = null) {
     const container = document.getElementById('horariosContainer');
     if (!container) return;
@@ -209,7 +180,6 @@ async function generarHorariosDisponibles(fecha = null) {
         return;
     }
     
-    // Mostrar cargando
     container.innerHTML = `
         <div class="col-span-3 text-center py-4">
             <div class="spinner mx-auto"></div>
@@ -217,15 +187,12 @@ async function generarHorariosDisponibles(fecha = null) {
         </div>
     `;
     
-    // Asegurar que los horarios estén cargados
     if (HORARIOS_CONSULTORIO.length === 0) {
         await cargarHorarios();
     }
     
-    // Obtener horarios ocupados
     const horariosOcupados = await getHorariosOcupados(fecha);
     
-    // Limpiar container
     container.innerHTML = '';
     
     HORARIOS_CONSULTORIO.forEach(horario => {
@@ -246,7 +213,6 @@ async function generarHorariosDisponibles(fecha = null) {
         container.appendChild(button);
     });
     
-    // Mostrar resumen
     const disponibles = HORARIOS_CONSULTORIO.length - horariosOcupados.length;
     const resumen = document.createElement('div');
     resumen.className = 'col-span-3 mt-4 p-3 bg-blue-50 rounded-xl text-sm text-center';
@@ -271,14 +237,12 @@ function seleccionarHorario(horario, button) {
     console.log('Horario seleccionado:', horario);
 }
 
-// ==================== MODAL: AGENDAR CITA ====================
-
 function openAgendarCitaModal() {
     const modal = document.getElementById('agendarCitaModal');
     if (!modal) return;
     
     if (!verificarConfiguracion()) {
-        alert('⚠️ Error: Google Apps Script no configurado.\nRevisa la consola para más información.');
+        alert('⚠️ Error: Google Apps Script no configurado.\nEdita script-google-sheets.js línea 15');
         return;
     }
     
@@ -361,8 +325,6 @@ async function handleAgendarCita(e) {
     }
 }
 
-// ==================== MODAL: REGISTRO ====================
-
 function openRegisterModal() {
     const modal = document.getElementById('registerModal');
     if (modal) {
@@ -439,8 +401,6 @@ async function handleRegistro(e) {
     }
 }
 
-// ==================== MODAL: LOGIN ====================
-
 function openLoginModal() {
     const modal = document.getElementById('loginModal');
     if (modal) {
@@ -516,8 +476,6 @@ function mostrarDashboard(usuario) {
     );
 }
 
-// ==================== SWITCH ENTRE MODALS ====================
-
 function switchToLogin() {
     closeRegisterModal();
     setTimeout(() => openLoginModal(), 300);
@@ -527,8 +485,6 @@ function switchToRegister() {
     closeLoginModal();
     setTimeout(() => openRegisterModal(), 300);
 }
-
-// ==================== FUNCIONES DE DEBUG ====================
 
 async function verCitasGoogleSheets() {
     const resultado = await llamarAPI('obtenerTodasCitas');
@@ -548,8 +504,6 @@ async function verHorariosOcupadosGS(fecha) {
     return resultado;
 }
 
-// ==================== INICIALIZACIÓN ====================
-
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('🦷 ========================================');
     console.log('   SONRISA NORTE - GOOGLE SHEETS');
@@ -557,14 +511,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     if (!verificarConfiguracion()) {
         console.error('❌ Configuración incompleta');
+        console.error('Edita script-google-sheets.js línea 15');
         return;
     }
     
-    // Cargar horarios del consultorio
     await cargarHorarios();
     console.log('✅ Horarios cargados:', HORARIOS_CONSULTORIO.length);
     
-    // Event listeners
     const formAgendarCita = document.getElementById('agendarCitaForm');
     if (formAgendarCita) {
         formAgendarCita.addEventListener('submit', handleAgendarCita);
@@ -630,7 +583,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.log('🦷 ========================================');
 });
 
-// Exportar funciones globales
 window.openAgendarCitaModal = openAgendarCitaModal;
 window.closeAgendarCitaModal = closeAgendarCitaModal;
 window.openRegisterModal = openRegisterModal;
