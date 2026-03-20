@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sonrisa Norte v3.1 - Clínica Dental</title>
+    <title>Sonrisa Norte v3.2 FINAL - Clínica Dental</title></title>
     <meta name="description" content="Sistema de gestión de citas dentales - Sonrisa Norte. Agenda tu cita en línea de forma rápida y segura.">
     
     <!-- Tailwind CSS CDN -->
@@ -332,7 +332,7 @@
                     <div class="text-4xl">🦷</div>
                     <div>
                         <h1 class="text-2xl font-bold text-gray-900">Sonrisa Norte</h1>
-                        <p class="text-xs text-gray-500">Clínica Dental v3.1</p>
+                        <p class="text-xs text-gray-500">Clínica Dental v3.2</p>
                     </div>
                 </div>
                 
@@ -774,7 +774,7 @@
                         <div class="text-3xl">🦷</div>
                         <div>
                             <h3 class="text-xl font-bold">Sonrisa Norte</h3>
-                            <p class="text-sm text-gray-400">Clínica Dental v3.1</p>
+                            <p class="text-sm text-gray-400">Clínica Dental v3.2 FINAL</p>
                         </div>
                     </div>
                     <p class="text-gray-400 text-sm">
@@ -1048,15 +1048,12 @@
     </div>
 
     <!-- JAVASCRIPT -->
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <!-- JAVASCRIPT -->
+    <script>
 // ============================================================
 // ⚠️⚠️⚠️ CONFIGURACIÓN OBLIGATORIA ⚠️⚠️⚠️
 // 
 // REEMPLAZA LA URL EN LA LÍNEA DE ABAJO CON TU URL DE GOOGLE APPS SCRIPT
-// (La que obtienes al implementar como Web App)
-//
-// Ejemplo de cómo debe quedar:
-// const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXXXXXXXXXXXXX/exec';
 // ============================================================
 
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzD2g9c4dKiPyA9jJQUwEKDUGTShABd1hkgCP3FfUXcvcguGOlTEcH1OZy5ZdPphtRk/exec';
@@ -1066,32 +1063,59 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzD2g9c4dKiPy
 // ============================================================
 
 const today = new Date().toISOString().split('T')[0];
-let HORARIOS_CONSULTORIO = ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
+let HORARIOS_CONSULTORIO = [];
 
 const STORAGE_KEYS = {
     USUARIO_ACTUAL: 'sonrisa_norte_usuario_actual'
 };
 
+// ============================================================
+// FUNCIÓN PRINCIPAL DE API - USA POST + JSON
+// ============================================================
+
 async function llamarAPI(action, params = {}) {
     try {
-        params.action = action;
-        const url = GOOGLE_SCRIPT_URL + '?' + new URLSearchParams(params).toString();
-        console.log('🔵 Llamando a API:', action);
-        const response = await fetch(url, { method: 'GET', redirect: 'follow' });
-        if (!response.ok) throw new Error('Error HTTP ' + response.status);
+        const payload = {
+            action: action,
+            ...params
+        };
+        
+        console.log('🔵 POST Request:', action);
+        console.log('Payload:', payload);
+        
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+            redirect: 'follow'
+        });
+        
+        if (!response.ok) {
+            throw new Error('HTTP Error ' + response.status);
+        }
+        
         const data = await response.json();
-        console.log('🔵 Respuesta:', data);
+        console.log('🔵 Response:', data);
+        
         return data;
     } catch (error) {
         console.error('🔴 Error en API:', error);
-        return { success: false, message: 'Error de conexión: ' + error.message };
+        return { 
+            success: false, 
+            message: 'Error de conexión: ' + error.message 
+        };
     }
 }
+
+// ============================================================
+// UTILIDADES
+// ============================================================
 
 function verificarConfiguracion() {
     if (GOOGLE_SCRIPT_URL === 'PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT' || GOOGLE_SCRIPT_URL.trim() === '') {
         console.error('❌ ERROR: URL de Google Apps Script no configurada');
-        console.error('Edita el HTML y busca: PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT');
         return false;
     }
     return true;
@@ -1143,6 +1167,20 @@ function mostrarCargando(elementId, mostrar = true) {
     }
 }
 
+// ============================================================
+// HORARIOS
+// ============================================================
+
+async function cargarHorarios() {
+    const resultado = await llamarAPI('obtenerHorarios');
+    if (resultado.success) {
+        HORARIOS_CONSULTORIO = resultado.horarios;
+        return resultado.horarios;
+    }
+    HORARIOS_CONSULTORIO = ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
+    return HORARIOS_CONSULTORIO;
+}
+
 async function getHorariosOcupados(fecha) {
     const resultado = await llamarAPI('obtenerHorariosOcupados', { fecha });
     return resultado.success ? resultado.horariosOcupados : [];
@@ -1158,6 +1196,8 @@ async function generarHorariosDisponibles(fecha = null) {
     }
     
     container.innerHTML = '<div class="col-span-3 text-center py-4"><div class="spinner mx-auto"></div><p class="text-gray-600 mt-3">Consultando disponibilidad...</p></div>';
+    
+    if (HORARIOS_CONSULTORIO.length === 0) await cargarHorarios();
     
     const horariosOcupados = await getHorariosOcupados(fecha);
     container.innerHTML = '';
@@ -1198,11 +1238,15 @@ function seleccionarHorario(horario, button) {
     console.log('Horario seleccionado:', horario);
 }
 
+// ============================================================
+// AGENDAR CITA
+// ============================================================
+
 function openAgendarCitaModal() {
     const modal = document.getElementById('agendarCitaModal');
     if (!modal) return;
     if (!verificarConfiguracion()) {
-        alert('⚠️ Error: Debes configurar la URL de Google Apps Script en el código HTML.\n\nBusca: PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT\ny reemplázala con tu URL.');
+        alert('⚠️ Error: Debes configurar la URL de Google Apps Script');
         return;
     }
     modal.classList.add('active');
@@ -1264,12 +1308,16 @@ async function handleAgendarCita(e) {
             '<small>ID: ' + resultado.cita.id + '</small>', 
             'success'
         );
-        console.log('✅ Cita guardada en Google Sheets:', resultado.cita);
+        console.log('✅ Cita guardada:', resultado.cita);
         setTimeout(() => closeAgendarCitaModal(), 4000);
     } else {
         showMessage('agendarCitaMessage', '❌ ' + resultado.message, 'error');
     }
 }
+
+// ============================================================
+// REGISTRO
+// ============================================================
 
 function openRegisterModal() {
     const modal = document.getElementById('registerModal');
@@ -1334,12 +1382,16 @@ async function handleRegistro(e) {
             'Redirigiendo...', 
             'success'
         );
-        console.log('✅ Usuario registrado en Google Sheets:', resultado.usuario);
+        console.log('✅ Usuario registrado:', resultado.usuario);
         setTimeout(() => switchToLogin(), 2500);
     } else {
         showMessage('registerMessage', '❌ ' + resultado.message, 'error');
     }
 }
+
+// ============================================================
+// LOGIN
+// ============================================================
 
 function openLoginModal() {
     const modal = document.getElementById('loginModal');
@@ -1402,23 +1454,27 @@ function switchToRegister() {
     setTimeout(() => openRegisterModal(), 300);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+// ============================================================
+// INICIALIZACIÓN
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', async function() {
     console.log('🦷 ========================================');
-    console.log('   SONRISA NORTE - GOOGLE SHEETS');
+    console.log('   SONRISA NORTE v3.2 FINAL');
+    console.log('   API REST - POST + JSON');
     console.log('   ========================================');
     
     if (!verificarConfiguracion()) {
-        console.error('❌ Configuración incompleta - URL no encontrada');
-        console.error('Busca en el código: PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT');
-    } else {
-        console.log('✅ URL configurada correctamente');
+        console.error('❌ URL no configurada');
+        return;
     }
     
-    console.log('✅ Horarios disponibles:', HORARIOS_CONSULTORIO.length);
+    await cargarHorarios();
+    console.log('✅ Horarios cargados:', HORARIOS_CONSULTORIO.length);
     
-    document.getElementById('agendarCitaForm').addEventListener('submit', handleAgendarCita);
-    document.getElementById('registerForm').addEventListener('submit', handleRegistro);
-    document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    document.getElementById('agendarCitaForm')?.addEventListener('submit', handleAgendarCita);
+    document.getElementById('registerForm')?.addEventListener('submit', handleRegistro);
+    document.getElementById('loginForm')?.addEventListener('submit', handleLogin);
     
     window.addEventListener('click', e => {
         if (e.target.classList.contains('modal')) {
@@ -1440,17 +1496,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Detector de envío exitoso de FormSubmit
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('sent') === 'true') {
-        // Mostrar mensaje de éxito
         const successDiv = document.getElementById('formSuccessMessage');
         if (successDiv) {
             successDiv.classList.remove('hidden');
-            // Scroll a la sección de contacto
             setTimeout(() => {
                 document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
             }, 500);
-            // Limpiar URL sin recargar
             window.history.replaceState({}, document.title, window.location.pathname);
-            // Ocultar mensaje después de 8 segundos
             setTimeout(() => {
                 successDiv.classList.add('hidden');
             }, 8000);
@@ -1479,7 +1531,7 @@ window.closeLoginModal = closeLoginModal;
 window.switchToLogin = switchToLogin;
 window.switchToRegister = switchToRegister;
 
-console.log('✅ Sonrisa Norte v3.1 - Script integrado cargado');
+console.log('✅ Sonrisa Norte v3.2 FINAL - Script cargado');
     </script>
 
 </body>
