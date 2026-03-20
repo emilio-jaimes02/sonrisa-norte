@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sonrisa Norte v3.0 - Clínica Dental</title>
+    <title>Sonrisa Norte v3.1 - Clínica Dental</title>
     <meta name="description" content="Sistema de gestión de citas dentales - Sonrisa Norte. Agenda tu cita en línea de forma rápida y segura.">
     
     <!-- Tailwind CSS CDN -->
@@ -205,13 +205,94 @@
             margin-top: 0;
         }
 
+        /* Floating Social Icons Container */
+        .floating-social-container {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .social-float {
+            width: 60px;
+            height: 60px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFF;
+            font-size: 28px;
+            box-shadow: 2px 2px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-float.whatsapp {
+            background-color: #25d366;
+            animation: pulse 2s infinite;
+        }
+
+        .social-float.whatsapp:hover {
+            background-color: #128C7E;
+            transform: scale(1.1);
+        }
+
+        .social-float.facebook {
+            background-color: #1877f2;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .social-float.instagram {
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .social-float.disabled {
+            position: relative;
+        }
+
+        .social-float.disabled::after {
+            content: 'Próximamente';
+            position: absolute;
+            right: 70px;
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .social-float.disabled:hover::after {
+            opacity: 1;
+        }
+
         @media screen and (max-width: 768px) {
-            .whatsapp-float {
-                width: 50px;
-                height: 50px;
+            .floating-social-container {
                 bottom: 20px;
                 right: 20px;
-                font-size: 25px;
+                gap: 10px;
+            }
+            
+            .social-float {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+
+            .social-float.disabled::after {
+                right: 60px;
+                font-size: 10px;
+                padding: 5px 8px;
             }
         }
 
@@ -226,10 +307,6 @@
             100% {
                 box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
             }
-        }
-
-        .whatsapp-float {
-            animation: pulse 2s infinite;
         }
 
         /* Disabled social icons */
@@ -257,13 +334,26 @@
 </head>
 <body class="bg-gray-50">
 
-    <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/5215582281999?text=Hola,%20me%20gustaría%20agendar%20una%20cita%20en%20Sonrisa%20Norte" 
-       target="_blank" 
-       class="whatsapp-float"
-       title="Chatea con nosotros por WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <!-- Floating Social Media Buttons -->
+    <div class="floating-social-container">
+        <!-- Facebook - Deshabilitado -->
+        <div class="social-float facebook disabled" title="Facebook - Próximamente">
+            <i class="fab fa-facebook-f"></i>
+        </div>
+        
+        <!-- Instagram - Deshabilitado -->
+        <div class="social-float instagram disabled" title="Instagram - Próximamente">
+            <i class="fab fa-instagram"></i>
+        </div>
+        
+        <!-- WhatsApp - Activo -->
+        <a href="https://wa.me/5215582281999?text=Hola,%20me%20gustaría%20agendar%20una%20cita%20en%20Sonrisa%20Norte" 
+           target="_blank" 
+           class="social-float whatsapp"
+           title="Chatea con nosotros por WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
 
     <!-- NAVEGACIÓN -->
     <nav class="fixed w-full top-0 z-50 nav-blur border-b border-gray-200">
@@ -273,7 +363,7 @@
                     <div class="text-4xl">🦷</div>
                     <div>
                         <h1 class="text-2xl font-bold text-gray-900">Sonrisa Norte</h1>
-                        <p class="text-xs text-gray-500">Clínica Dental v3.0</p>
+                        <p class="text-xs text-gray-500">Clínica Dental v3.1</p>
                     </div>
                 </div>
                 
@@ -650,7 +740,17 @@
                         <input type="hidden" name="_subject" value="Nuevo mensaje de contacto - Sonrisa Norte">
                         <input type="hidden" name="_captcha" value="false">
                         <input type="hidden" name="_template" value="box">
+                        <input type="hidden" name="_next" value="https://emilio-jaimes02.github.io/sonrisa-norte/?sent=true">
                         <input type="text" name="_honey" style="display:none">
+                        
+                        <!-- Mensaje de éxito -->
+                        <div id="formSuccessMessage" class="hidden">
+                            <div class="alert alert-success text-center">
+                                <i class="fas fa-check-circle text-3xl mb-3"></i>
+                                <h3 class="font-bold text-lg mb-2">¡Mensaje Enviado!</h3>
+                                <p>Gracias por contactarnos. Te responderemos pronto.</p>
+                            </div>
+                        </div>
                         
                         <div>
                             <label class="block text-sm font-bold text-gray-900 mb-2">Nombre Completo *</label>
@@ -705,7 +805,7 @@
                         <div class="text-3xl">🦷</div>
                         <div>
                             <h3 class="text-xl font-bold">Sonrisa Norte</h3>
-                            <p class="text-sm text-gray-400">Clínica Dental v3.0</p>
+                            <p class="text-sm text-gray-400">Clínica Dental v3.1</p>
                         </div>
                     </div>
                     <p class="text-gray-400 text-sm">
@@ -990,7 +1090,7 @@
 // const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXXXXXXXXXXXXX/exec';
 // ============================================================
 
-const GOOGLE_SCRIPT_URL = 'PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzD2g9c4dKiPyA9jJQUwEKDUGTShABd1hkgCP3FfUXcvcguGOlTEcH1OZy5ZdPphtRk/exec';
 
 // ============================================================
 // NO EDITES NADA MÁS ABAJO DE ESTA LÍNEA
@@ -1377,6 +1477,26 @@ document.addEventListener('DOMContentLoaded', function() {
             nav.classList.remove('shadow-lg');
         }
     });
+    
+    // Detector de envío exitoso de FormSubmit
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('sent') === 'true') {
+        // Mostrar mensaje de éxito
+        const successDiv = document.getElementById('formSuccessMessage');
+        if (successDiv) {
+            successDiv.classList.remove('hidden');
+            // Scroll a la sección de contacto
+            setTimeout(() => {
+                document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+            // Limpiar URL sin recargar
+            window.history.replaceState({}, document.title, window.location.pathname);
+            // Ocultar mensaje después de 8 segundos
+            setTimeout(() => {
+                successDiv.classList.add('hidden');
+            }, 8000);
+        }
+    }
     
     console.log('✅ Sistema inicializado correctamente');
     console.log('🦷 ========================================');
