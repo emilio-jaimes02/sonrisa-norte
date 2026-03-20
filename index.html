@@ -174,38 +174,7 @@
             border: 1px solid #EF4444;
         }
 
-        /* WhatsApp Floating Button */
-        .whatsapp-float {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            bottom: 40px;
-            right: 40px;
-            background-color: #25d366;
-            color: #FFF;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 30px;
-            box-shadow: 2px 2px 15px rgba(0,0,0,0.3);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .whatsapp-float:hover {
-            background-color: #128C7E;
-            transform: scale(1.1);
-            box-shadow: 2px 2px 25px rgba(0,0,0,0.4);
-        }
-
-        .whatsapp-float i {
-            margin-top: 0;
-        }
-
-        /* Floating Social Icons Container */
+        /* Floating Social Media Buttons */
         .floating-social-container {
             position: fixed;
             bottom: 40px;
@@ -680,7 +649,7 @@
                             </div>
                             <div class="ml-4">
                                 <h3 class="font-bold text-gray-900 mb-1">Email</h3>
-                                <p class="text-gray-600"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5b3834352f3a382f341b2834352932283a3534292f3e75383436">[email&#160;protected]</a></p>
+                                <p class="text-gray-600"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a4c7cbcad0c5c7d0cbe4d7cbcad6cdd7c5cacbd6d0c18ac7cbc9">[email&#160;protected]</a></p>
                             </div>
                         </div>
                         
@@ -1466,17 +1435,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Formulario de contacto ahora es manejado por FormSubmit
-    // No se requiere JavaScript adicional
-    
-    const nav = document.querySelector('nav');
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 100) {
-            nav.classList.add('shadow-lg');
-        } else {
-            nav.classList.remove('shadow-lg');
-        }
-    });
+    // FormSubmit - No necesita handler JavaScript, se maneja por POST
     
     // Detector de envío exitoso de FormSubmit
     const urlParams = new URLSearchParams(window.location.search);
@@ -1498,6 +1457,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 100) {
+            nav.classList.add('shadow-lg');
+        } else {
+            nav.classList.remove('shadow-lg');
+        }
+    });
+    
     console.log('✅ Sistema inicializado correctamente');
     console.log('🦷 ========================================');
 });
@@ -1506,4 +1474,13 @@ window.openAgendarCitaModal = openAgendarCitaModal;
 window.closeAgendarCitaModal = closeAgendarCitaModal;
 window.openRegisterModal = openRegisterModal;
 window.closeRegisterModal = closeRegisterModal;
-window.openLoginModal = op
+window.openLoginModal = openLoginModal;
+window.closeLoginModal = closeLoginModal;
+window.switchToLogin = switchToLogin;
+window.switchToRegister = switchToRegister;
+
+console.log('✅ Sonrisa Norte v3.1 - Script integrado cargado');
+    </script>
+
+</body>
+</html>
