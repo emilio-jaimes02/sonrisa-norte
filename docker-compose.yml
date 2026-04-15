@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Servicio web principal
+  sonrisa-norte-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sonrisa-norte
+    ports:
+      - "8080:80"
+    volumes:
+      # Mount para desarrollo (cambios en tiempo real)
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    restart: unless-stopped
+    networks:
+      - sonrisa-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "project=sonrisa-norte"
+      - "environment=development"
+      - "version=3.5"
+
+networks:
+  sonrisa-network:
+    driver: bridge
+
+# Para usar:
+# docker-compose up -d          # Iniciar en background
+# docker-compose down           # Detener
+# docker-compose logs -f        # Ver logs
+# docker-compose ps             # Ver estado
+# docker-compose restart        # Reiniciar

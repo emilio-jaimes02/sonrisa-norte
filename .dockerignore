@@ -1,0 +1,32 @@
+# Git
+.git
+.gitignore
+.github
+
+# Node modules (si usas npm en el futuro)
+node_modules
+npm-debug.log
+
+# Tests
+tests
+playwright-report
+
+# Documentación
+README.md
+DEVOPS.md
+*.pdf
+
+# Editor
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporal
+*.tmp
+*.log
