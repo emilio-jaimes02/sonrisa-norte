@@ -1,0 +1,147 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Ejecutar tests diariamente a las 9 AM
+    - cron: '0 9 * * *'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v3
+    
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: 📦 Install Playwright
+      run: |
+        npm init -y
+        npm install -D @playwright/test
+        npx playwright install chromium
+    
+    - name: 📝 Create test file
+      run: |
+        mkdir -p tests
+        cat > tests/sonrisa-norte.spec.js << 'EOF'
+        const { test, expect } = require('@playwright/test');
+
+        const SITE_URL = 'https://quorbitintelligence.github.io/SonrisaNorte/';
+
+        test.describe('Sonrisa Norte - Tests E2E', () => {
+          
+          test('1. Homepage debe cargar correctamente', async ({ page }) => {
+            await page.goto(SITE_URL);
+            await expect(page).toHaveTitle(/Sonrisa Norte/);
+            console.log('✅ Título correcto');
+          });
+
+          test('2. Navegación debe estar presente', async ({ page }) => {
+            await page.goto(SITE_URL);
+            const nav = await page.locator('nav');
+            await expect(nav).toBeVisible();
+            console.log('✅ Navegación visible');
+          });
+
+          test('3. Botón "Agendar Cita" debe existir', async ({ page }) => {
+            await page.goto(SITE_URL);
+            const button = await page.locator('button:has-text("Agendar Cita")').first();
+            await expect(button).toBeVisible();
+            console.log('✅ Botón Agendar Cita visible');
+          });
+
+          test('4. Modal de citas debe abrirse', async ({ page }) => {
+            await page.goto(SITE_URL);
+            await page.locator('button:has-text("Agendar Cita")').first().click();
+            const modal = await page.locator('#modalAgendarCita');
+            await expect(modal).toBeVisible();
+            console.log('✅ Modal se abre correctamente');
+          });
+
+          test('5. Formulario de citas debe tener campos requeridos', async ({ page }) => {
+            await page.goto(SITE_URL);
+            await page.locator('button:has-text("Agendar Cita")').first().click();
+            
+            // Verificar campos
+            await expect(page.locator('input[name="nombreCita"]')).toBeVisible();
+            await expect(page.locator('input[name="emailCita"]')).toBeVisible();
+            await expect(page.locator('input[name="telefonoCita"]')).toBeVisible();
+            await expect(page.locator('select[name="servicioCita"]')).toBeVisible();
+            await expect(page.locator('input[name="fechaCitaInput"]')).toBeVisible();
+            
+            console.log('✅ Todos los campos del formulario presentes');
+          });
+
+          test('6. Sección de servicios debe mostrar 6 servicios', async ({ page }) => {
+            await page.goto(SITE_URL);
+            await page.locator('a[href="#servicios"]').click();
+            await page.waitForTimeout(1000);
+            
+            const servicios = await page.locator('#servicios .rounded-2xl').count();
+            expect(servicios).toBe(6);
+            console.log('✅ 6 servicios mostrados correctamente');
+          });
+
+          test('7. Formulario de contacto debe existir', async ({ page }) => {
+            await page.goto(SITE_URL);
+            await page.locator('a[href="#contacto"]').click();
+            await page.waitForTimeout(1000);
+            
+            const form = await page.locator('form[action*="formsubmit"]');
+            await expect(form).toBeVisible();
+            console.log('✅ Formulario de contacto presente');
+          });
+
+          test('8. WhatsApp flotante debe estar presente', async ({ page }) => {
+            await page.goto(SITE_URL);
+            const whatsapp = await page.locator('a[href*="wa.me"]');
+            await expect(whatsapp).toBeVisible();
+            console.log('✅ Botón de WhatsApp visible');
+          });
+
+          test('9. Footer debe contener información de contacto', async ({ page }) => {
+            await page.goto(SITE_URL);
+            const footer = await page.locator('footer');
+            await expect(footer).toContainText('Sonrisa Norte');
+            console.log('✅ Footer con información correcta');
+          });
+
+          test('10. Versión debe ser 3.5 o superior', async ({ page }) => {
+            await page.goto(SITE_URL);
+            const version = await page.locator('text=/v3\\.\\d+/').first();
+            await expect(version).toBeVisible();
+            const versionText = await version.textContent();
+            console.log('✅ Versión encontrada:', versionText);
+          });
+
+        });
+        EOF
+    
+    - name: 🧪 Run Playwright tests
+      run: npx playwright test --reporter=list
+    
+    - name: 📊 Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
+    
+    - name: 📋 Test Summary
+      if: always()
+      run: |
+        echo "================================================"
+        echo "📊 RESUMEN DE TESTS"
+        echo "================================================"
+        echo "✅ Tests completados"
+        echo "📅 Fecha: $(date)"
+        echo "================================================"

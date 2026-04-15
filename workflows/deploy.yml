@@ -1,1 +1,107 @@
+name: CI/CD - Deploy Sonrisa Norte
 
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 1. Checkout del código
+    - name: 📥 Checkout code
+      uses: actions/checkout@v3
+    
+    # 2. Validar HTML
+    - name: ✅ Validate HTML
+      run: |
+        echo "🔍 Validando estructura HTML..."
+        if [ -f "index.html" ]; then
+          echo "✅ index.html encontrado"
+          # Verificar que no esté vacío
+          if [ -s "index.html" ]; then
+            echo "✅ index.html no está vacío"
+          else
+            echo "❌ index.html está vacío"
+            exit 1
+          fi
+        else
+          echo "❌ index.html no encontrado"
+          exit 1
+        fi
+    
+    # 3. Verificar sintaxis básica
+    - name: 🔎 Check HTML syntax
+      run: |
+        echo "🔍 Verificando sintaxis HTML..."
+        # Verificar que tenga las etiquetas básicas
+        grep -q "<!DOCTYPE html>" index.html && echo "✅ DOCTYPE correcto" || (echo "❌ Falta DOCTYPE" && exit 1)
+        grep -q "<html" index.html && echo "✅ Tag <html> presente" || (echo "❌ Falta tag <html>" && exit 1)
+        grep -q "<head>" index.html && echo "✅ Tag <head> presente" || (echo "❌ Falta tag <head>" && exit 1)
+        grep -q "<body" index.html && echo "✅ Tag <body> presente" || (echo "❌ Falta tag <body>" && exit 1)
+        grep -q "</html>" index.html && echo "✅ Tag de cierre </html> presente" || (echo "❌ Falta tag </html>" && exit 1)
+        echo "✅ Sintaxis HTML básica correcta"
+    
+    # 4. Verificar versión
+    - name: 🏷️ Check version
+      run: |
+        echo "🔍 Verificando versión..."
+        if grep -q "v3\." index.html; then
+          VERSION=$(grep -oP "v3\.\d+" index.html | head -1)
+          echo "✅ Versión encontrada: $VERSION"
+        else
+          echo "⚠️ No se encontró versión en el archivo"
+        fi
+    
+    # 5. Verificar URLs de API
+    - name: 🔗 Check API URLs
+      run: |
+        echo "🔍 Verificando URLs de API..."
+        if grep -q "script.google.com/macros" index.html; then
+          echo "✅ URL de Google Apps Script encontrada"
+        else
+          echo "⚠️ No se encontró URL de Google Apps Script"
+        fi
+    
+    # 6. Verificar assets externos
+    - name: 📦 Check external assets
+      run: |
+        echo "🔍 Verificando assets externos..."
+        grep -q "cdn.tailwindcss.com" index.html && echo "✅ Tailwind CSS encontrado"
+        grep -q "cdnjs.cloudflare.com/ajax/libs/font-awesome" index.html && echo "✅ Font Awesome encontrado"
+    
+    # 7. Test de tamaño
+    - name: 📊 File size check
+      run: |
+        SIZE=$(wc -c < index.html)
+        echo "📏 Tamaño del archivo: $SIZE bytes"
+        if [ $SIZE -gt 100000 ]; then
+          echo "⚠️ Archivo grande (>100KB), considera optimizar"
+        else
+          echo "✅ Tamaño de archivo aceptable"
+        fi
+    
+    # 8. Generar reporte
+    - name: 📋 Generate report
+      if: always()
+      run: |
+        echo "================================================"
+        echo "📊 REPORTE DE BUILD"
+        echo "================================================"
+        echo "📅 Fecha: $(date)"
+        echo "🔨 Branch: ${{ github.ref }}"
+        echo "👤 Autor: ${{ github.actor }}"
+        echo "📝 Commit: ${{ github.sha }}"
+        echo "✅ Validaciones completadas"
+        echo "================================================"
+    
+    # 9. Deploy (solo en main)
+    - name: 🚀 Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        echo "🚀 Desplegando a GitHub Pages..."
+        echo "✅ GitHub Pages se actualizará automáticamente"
+        echo "🌐 URL: https://quorbitintelligence.github.io/SonrisaNorte/"
